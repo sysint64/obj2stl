@@ -3,7 +3,10 @@ include(GoogleTest)
 find_package(GTest REQUIRED)
 # find_package(GMock REQUIRED)
 
-set(SOURCE_FILES ../src/obj.cpp ../src/utils.cpp ../src/mesh.cpp)
+set(SOURCE_FILES ../src/obj.cpp
+  ../src/utils.cpp
+  ../src/mesh.cpp
+  ../src/triangulation.cpp)
 
 macro(add_simple_test name)
   add_executable(${name} "${SOURCE_FILES};${name}.cpp")
@@ -13,3 +16,4 @@ endmacro(add_simple_test)
 
 add_simple_test(obj)
 add_simple_test(mesh)
+add_simple_test(triangulation)

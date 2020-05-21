@@ -152,8 +152,8 @@ namespace mesh {
 
         this->push_polygon(
             Polygon(
-                normals,
                 vertices,
+                normals,
                 tex_coords
             )
         );

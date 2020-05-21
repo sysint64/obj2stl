@@ -31,13 +31,13 @@ namespace mesh {
     };
 
     struct Polygon {
-        const std::vector<glm::vec3> normals;
         const std::vector<glm::vec3> vertices;
+        const std::vector<glm::vec3> normals;
         const std::vector<glm::vec2> tex_coords;
 
         Polygon(
-            std::vector<glm::vec3> const& normals,
             std::vector<glm::vec3> const& vertices,
+            std::vector<glm::vec3> const& normals,
             std::vector<glm::vec2> const& tex_coords
         ) :
             normals(normals),
@@ -51,8 +51,8 @@ namespace mesh {
     };
 
     struct Triangle {
-        const glm::vec3 normals[3];
         const glm::vec3 vertices[3];
+        const glm::vec3 normals[3];
         const glm::vec2 tex_coords[3];
     };
 
@@ -145,7 +145,13 @@ namespace mesh {
     };
 
     class TriangulationStrategy {
-        virtual std::vector<Triangle> triangulate(Polygon polygon) = 0;
+    public:
+        virtual std::vector<Triangle> triangulate(Polygon &polygon) = 0;
+    };
+
+    class DummyTriangulationStrategy : public TriangulationStrategy {
+    public:
+        std::vector<Triangle> triangulate(Polygon &polygon);
     };
 
     class MeshLayoutReader {
