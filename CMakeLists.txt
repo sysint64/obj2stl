@@ -5,7 +5,7 @@ option(ENABLE_CLANG_SANITIZE "ENABLE_CLANG_SANITIZE" ON)
 option(ENABLE_TESTS "Enable tests" ON)
 option(ENABLE_BENCHMARKING "Enable benchmarking" ON)
 
-set(CMAKE_CXX_CLANG_TIDY clang-tidy -checks=-*,readability-*)
+set(CMAKE_CXX_CLANG_TIDY clang-tidy)
 set(DEBUG_FLAGS "${CMAKE_CXX_FLAGS} -g3 -O0")
 
 if (APPLE)
@@ -27,7 +27,7 @@ find_package(GLM REQUIRED)
 
 add_definitions(-DGLM_FORCE_RADIANS)
 
-set(SOURCE_FILES src/greet.cpp src/utils.cpp)
+set(SOURCE_FILES src/obj.cpp src/utils.cpp src/mesh.cpp)
 add_executable(main src/main.cpp ${SOURCE_FILES})
 include_directories(include/)
 

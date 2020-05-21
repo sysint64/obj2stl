@@ -3,6 +3,7 @@
 #include <glm/glm.hpp>
 
 #include "obj.hpp"
+#include "format.hpp"
 #include "utils.hpp"
 
 int main(int argc, char **argv) {
