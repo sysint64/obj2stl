@@ -28,6 +28,12 @@ namespace mesh {
             this->normal_index = normal_index;
             this->tex_coord_index = tex_coord_index;
         }
+
+        bool operator==(Triplet const& other) const {
+            return this->vertex_index == other.vertex_index &&
+                this->normal_index == other.normal_index &&
+                this->tex_coord_index == other.tex_coord_index;
+        }
     };
 
     struct Polygon {
@@ -48,12 +54,35 @@ namespace mesh {
             assert(vertices.size() == normals.size());
             assert(vertices.size() == tex_coords.size());
         }
+
+        bool operator==(Polygon const& other) const {
+            return this->vertices == other.vertices &&
+                this->normals == other.normals &&
+                this->tex_coords == other.tex_coords;
+        }
     };
 
     struct Triangle {
-        const glm::vec3 vertices[3];
-        const glm::vec3 normals[3];
-        const glm::vec2 tex_coords[3];
+        const std::array<glm::vec3, 3> vertices;
+        const std::array<glm::vec3, 3> normals;
+        const std::array<glm::vec2, 3> tex_coords;
+
+        Triangle(
+            std::array<glm::vec3, 3> const& vertices,
+            std::array<glm::vec3, 3> const& normals,
+            std::array<glm::vec2, 3> const& tex_coords
+        ) :
+            normals(normals),
+            vertices(vertices),
+            tex_coords(tex_coords)
+        {
+        }
+
+        bool operator==(Triangle const& other) const {
+            return this->vertices == other.vertices &&
+                this->normals == other.normals &&
+                this->tex_coords == other.tex_coords;
+        }
     };
 
     struct ColoredTriangle {
@@ -125,7 +154,7 @@ namespace mesh {
     public:
         MeshLayoutBuilder();
 
-        MeshLayout build();
+        std::shared_ptr<MeshLayout> build();
 
         void push_vertex(glm::vec3 vertex);
 
@@ -155,30 +184,32 @@ namespace mesh {
     };
 
     class MeshLayoutReader {
-        std::shared_ptr<MeshLayout> mesh;
+        std::shared_ptr<MeshLayout> layout;
         std::shared_ptr<TriangulationStrategy> triangulation_strategy;
+
+        std::vector<Triangle> triangles_data;
+        std::vector<Polygon> polygons_data;
+        std::vector<Triplet> triplets_data;
 
     public:
         MeshLayoutReader(
-            std::shared_ptr<MeshLayout> mesh,
+            std::shared_ptr<MeshLayout> layout,
             std::shared_ptr<TriangulationStrategy> triangulation_strategy
         ) {
-            this->mesh = mesh;
+            this->layout = layout;
             this->triangulation_strategy = triangulation_strategy;
         }
 
-        std::vector<Triangle>::iterator triangles();
+        std::vector<Triangle> const& triangles();
 
-        std::vector<ColoredTriangle>::iterator colored_triangle();
+        std::vector<Polygon> const& polygons();
 
-        std::vector<Polygon>::iterator polygons();
+        std::vector<glm::vec3> const& vertices();
 
-        std::vector<glm::vec3>::iterator vertices();
+        std::vector<glm::vec3> const& normals();
 
-        std::vector<glm::vec3>::iterator normals();
+        std::vector<glm::vec2> const& tex_coords();
 
-        std::vector<glm::vec2>::iterator tex_coords();
-
-        std::vector<Triplet>::iterator triplets();
+        std::vector<Triplet> const& triplets();
     };
 }

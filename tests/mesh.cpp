@@ -38,7 +38,7 @@ TEST(builderTest, testFlatWithoutColor) {
     auto layout = builder->build();
 
     ASSERT_THAT(
-        layout.vertices,
+        layout->vertices,
         testing::ElementsAre(
             glm::vec3(1, 0, 0),
             glm::vec3(0, 1, 0),
@@ -47,7 +47,7 @@ TEST(builderTest, testFlatWithoutColor) {
     );
 
     ASSERT_THAT(
-        layout.normals,
+        layout->normals,
         testing::ElementsAre(
             glm::vec3(0.5, 0.5, 0),
             glm::vec3(1, 0.5, 0)
@@ -55,7 +55,7 @@ TEST(builderTest, testFlatWithoutColor) {
     );
 
     ASSERT_THAT(
-        layout.tex_coords,
+        layout->tex_coords,
         testing::ElementsAre(
             glm::vec2(0, 0),
             glm::vec2(0.5, 0.5),
@@ -65,23 +65,23 @@ TEST(builderTest, testFlatWithoutColor) {
     );
 
     ASSERT_THAT(
-        layout.colors,
+        layout->colors,
         testing::ElementsAre(
             glm::vec4(0, 0, 0, 1)
         )
     );
 
-    ASSERT_EQ(layout.faces.size(), 2);
+    ASSERT_EQ(layout->faces.size(), 2);
 
-    ASSERT_THAT(layout.faces[0].vertices_indices, testing::ElementsAre(0, 1, 2));
-    ASSERT_THAT(layout.faces[0].normals_indices, testing::ElementsAre(0, 1, 0));
-    ASSERT_THAT(layout.faces[0].tex_coord_indices, testing::ElementsAre(0, 1, 2));
-    ASSERT_THAT(layout.faces[0].color_indices, testing::ElementsAre(0, 0, 0));
+    ASSERT_THAT(layout->faces[0].vertices_indices, testing::ElementsAre(0, 1, 2));
+    ASSERT_THAT(layout->faces[0].normals_indices, testing::ElementsAre(0, 1, 0));
+    ASSERT_THAT(layout->faces[0].tex_coord_indices, testing::ElementsAre(0, 1, 2));
+    ASSERT_THAT(layout->faces[0].color_indices, testing::ElementsAre(0, 0, 0));
 
-    ASSERT_THAT(layout.faces[1].vertices_indices, testing::ElementsAre(2, 0, 0));
-    ASSERT_THAT(layout.faces[1].normals_indices, testing::ElementsAre(0, 1, 1));
-    ASSERT_THAT(layout.faces[1].tex_coord_indices, testing::ElementsAre(2, 3, 2));
-    ASSERT_THAT(layout.faces[1].color_indices, testing::ElementsAre(0, 0, 0));
+    ASSERT_THAT(layout->faces[1].vertices_indices, testing::ElementsAre(2, 0, 0));
+    ASSERT_THAT(layout->faces[1].normals_indices, testing::ElementsAre(0, 1, 1));
+    ASSERT_THAT(layout->faces[1].tex_coord_indices, testing::ElementsAre(2, 3, 2));
+    ASSERT_THAT(layout->faces[1].color_indices, testing::ElementsAre(0, 0, 0));
 }
 
 TEST(builderTest, testVertexCoordIndexValidation) {
@@ -154,23 +154,23 @@ TEST(builderTest, testTriangle) {
     auto builder = std::make_unique<mesh::MeshLayoutBuilder>();
 
     builder->push_triangle(
-        mesh::Triangle {
-            .vertices = {
+        mesh::Triangle(
+            {
                 glm::vec3(1, 0, 0),
                 glm::vec3(0, 1, 0),
                 glm::vec3(0, 0, 1)
             },
-            .normals = {
+            {
                 glm::vec3(0, 0, 1),
                 glm::vec3(0, 1, 0),
                 glm::vec3(1, 0, 0)
             },
-            .tex_coords = {
+            {
                 glm::vec2(0, 0),
                 glm::vec2(0, 1),
                 glm::vec2(1, 0)
-            },
-        }
+            }
+        )
     );
 
     builder->push_vertex(glm::vec3(0, 1, 0));
@@ -178,29 +178,29 @@ TEST(builderTest, testTriangle) {
     builder->push_tex_coord(glm::vec2(0, 1));
 
     builder->push_triangle(
-        mesh::Triangle {
-            .vertices = {
+        mesh::Triangle(
+            {
                 glm::vec3(1, 0, 0),
                 glm::vec3(1, 0, 0),
                 glm::vec3(1, 0, 0)
             },
-            .normals = {
+            {
                 glm::vec3(0, 1, 0),
                 glm::vec3(0, 1, 0),
                 glm::vec3(0, 1, 0)
             },
-            .tex_coords = {
+            {
                 glm::vec2(1, 0),
                 glm::vec2(1, 0),
                 glm::vec2(1, 0)
-            },
-        }
+            }
+        )
     );
 
     auto layout = builder->build();
 
     ASSERT_THAT(
-        layout.vertices,
+        layout->vertices,
         testing::ElementsAre(
             glm::vec3(1, 0, 0),
             glm::vec3(0, 1, 0),
@@ -214,7 +214,7 @@ TEST(builderTest, testTriangle) {
     );
 
     ASSERT_THAT(
-        layout.normals,
+        layout->normals,
         testing::ElementsAre(
             glm::vec3(0, 0, 1),
             glm::vec3(0, 1, 0),
@@ -226,7 +226,7 @@ TEST(builderTest, testTriangle) {
     );
 
     ASSERT_THAT(
-        layout.tex_coords,
+        layout->tex_coords,
         testing::ElementsAre(
             glm::vec2(0, 0),
             glm::vec2(0, 1),
@@ -239,21 +239,21 @@ TEST(builderTest, testTriangle) {
     );
 
     ASSERT_THAT(
-        layout.colors,
+        layout->colors,
         testing::ElementsAre(
             glm::vec4(0, 0, 0, 1)
         )
     );
 
-    ASSERT_EQ(layout.faces.size(), 2);
+    ASSERT_EQ(layout->faces.size(), 2);
 
-    ASSERT_THAT(layout.faces[0].vertices_indices, testing::ElementsAre(0, 1, 2));
-    ASSERT_THAT(layout.faces[0].normals_indices, testing::ElementsAre(0, 1, 2));
-    ASSERT_THAT(layout.faces[0].tex_coord_indices, testing::ElementsAre(0, 1, 2));
-    ASSERT_THAT(layout.faces[0].color_indices, testing::ElementsAre(0, 0, 0));
+    ASSERT_THAT(layout->faces[0].vertices_indices, testing::ElementsAre(0, 1, 2));
+    ASSERT_THAT(layout->faces[0].normals_indices, testing::ElementsAre(0, 1, 2));
+    ASSERT_THAT(layout->faces[0].tex_coord_indices, testing::ElementsAre(0, 1, 2));
+    ASSERT_THAT(layout->faces[0].color_indices, testing::ElementsAre(0, 0, 0));
 
-    ASSERT_THAT(layout.faces[1].vertices_indices, testing::ElementsAre(5, 6, 7));
-    ASSERT_THAT(layout.faces[1].normals_indices, testing::ElementsAre(3, 4, 5));
-    ASSERT_THAT(layout.faces[1].tex_coord_indices, testing::ElementsAre(4, 5, 6));
-    ASSERT_THAT(layout.faces[1].color_indices, testing::ElementsAre(0, 0, 0));
+    ASSERT_THAT(layout->faces[1].vertices_indices, testing::ElementsAre(5, 6, 7));
+    ASSERT_THAT(layout->faces[1].normals_indices, testing::ElementsAre(3, 4, 5));
+    ASSERT_THAT(layout->faces[1].tex_coord_indices, testing::ElementsAre(4, 5, 6));
+    ASSERT_THAT(layout->faces[1].color_indices, testing::ElementsAre(0, 0, 0));
 }

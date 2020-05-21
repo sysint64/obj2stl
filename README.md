@@ -12,7 +12,7 @@ make -j<n> run
 
 - **ENABLE_CLANG_SANITIZE** - Enable clang sanitizer; *default*: ON;
 - **ENABLE_TESTS** - Build tests and add `test` target; *default*: ON;
-- **ENABLE_BENCHMARKING** - Build microbenchmarks and add `benchmark` target; *default*: ON;
+- **ENABLE_BENCHMARKING** - Build microbenchmarks and add `bench` target; *default*: ON;
 
 ## Run tests
 

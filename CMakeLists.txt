@@ -30,7 +30,8 @@ add_definitions(-DGLM_FORCE_RADIANS)
 set(SOURCE_FILES src/obj.cpp
   src/utils.cpp
   src/mesh.cpp
-  src/triangulation.cpp)
+  src/triangulation.cpp
+  src/mesh_layout_reader.cpp)
 
 add_executable(main src/main.cpp ${SOURCE_FILES})
 include_directories(include/)

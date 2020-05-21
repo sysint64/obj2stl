@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <numeric>
+#include <memory>
 #include "mesh.hpp"
 
 namespace mesh {
@@ -7,10 +8,10 @@ namespace mesh {
         this->colors.push_back(glm::vec4(0, 0, 0, 1));
     }
 
-    MeshLayout MeshLayoutBuilder::build() {
+    std::shared_ptr<MeshLayout> MeshLayoutBuilder::build() {
         this->validate_indices();
 
-        return MeshLayout(
+        return std::make_shared<MeshLayout>(
             this->vertices,
             this->normals,
             this->tex_coords,
@@ -94,6 +95,7 @@ namespace mesh {
         std::vector<size_t> vertices_indices(size);
         std::vector<size_t> normals_indices(size);
         std::vector<size_t> tex_coord_indices(size);
+        std::vector<size_t> colors_indices(size);
 
         std::iota(vertices_indices.begin(), vertices_indices.end(), vertex_start);
         std::iota(normals_indices.begin(), normals_indices.end(), normal_start);
@@ -122,7 +124,7 @@ namespace mesh {
                 vertices_indices,
                 normals_indices,
                 tex_coord_indices,
-                {0, 0, 0}
+                colors_indices
             )
         );
     }

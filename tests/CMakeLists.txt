@@ -6,7 +6,8 @@ find_package(GTest REQUIRED)
 set(SOURCE_FILES ../src/obj.cpp
   ../src/utils.cpp
   ../src/mesh.cpp
-  ../src/triangulation.cpp)
+  ../src/triangulation.cpp
+  ../src/mesh_layout_reader.cpp)
 
 macro(add_simple_test name)
   add_executable(${name} "${SOURCE_FILES};${name}.cpp")
@@ -17,3 +18,4 @@ endmacro(add_simple_test)
 add_simple_test(obj)
 add_simple_test(mesh)
 add_simple_test(triangulation)
+add_simple_test(mesh_layout_reader)
