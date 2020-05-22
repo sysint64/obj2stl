@@ -2,7 +2,7 @@
 
 namespace mesh_format {
 
-    std::vector<char> MeshWriter::write(std::shared_ptr<mesh::MeshLayout> layout) {
+    std::vector<char> MeshWriter::write(std::shared_ptr<mesh::MeshLayout> const& layout) {
         auto triangulation_strategy = std::make_shared<mesh::DummyTriangulationStrategy>();
         this->layout_reader = std::make_unique<mesh::MeshLayoutReader>(layout, triangulation_strategy);
 
@@ -66,7 +66,7 @@ namespace mesh_format {
     }
 
     void MeshWriter::write_polygons(std::vector<mesh::Polygon> const& polygons) {
-        for (auto polygon : polygons) {
+        for (auto const& polygon : polygons) {
             this->write_polygon(polygon);
         }
     }

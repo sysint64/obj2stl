@@ -23,7 +23,7 @@ namespace mesh_format {
             this->byte_order = byte_order;
         }
 
-        BytesWriter(FileType file_type) {
+        explicit BytesWriter(FileType file_type) {
             this->file_type = file_type;
             this->byte_order = ByteOrder::Native;
         }
@@ -40,7 +40,7 @@ namespace mesh_format {
 
         void write_byte(std::byte byte);
 
-        void write_bytes(std::vector<std::byte> const& bytes);
+        void write_bytes(std::vector<std::byte> const& in_bytes);
 
         void write_char(char ch);
 
@@ -58,7 +58,7 @@ namespace mesh_format {
 
     class MeshWriter {
     public:
-        std::vector<char> write(std::shared_ptr<mesh::MeshLayout> layout);
+        std::vector<char> write(std::shared_ptr<mesh::MeshLayout> const& layout);
 
         MeshWriter(FileType file_type, ByteOrder byte_order) {
             this->writer = std::make_unique<BytesWriter>(file_type, byte_order);
@@ -107,8 +107,6 @@ namespace mesh_format {
         virtual void write_tex_coord(glm::vec2 const& tex_coord) {}
 
         virtual void write_triplet(mesh::Triplet const& index) {}
-
-        virtual void write_end() {}
     };
 
 }

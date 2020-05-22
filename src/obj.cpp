@@ -6,15 +6,15 @@
 
 namespace obj_file {
 
-    static glm::vec3 parse_vec3(std::string line);
+    static glm::vec3 parse_vec3(std::string const& line);
 
-    static glm::vec2 parse_vec2(std::string line);
+    static glm::vec2 parse_vec2(std::string const& line);
 
-    static Face parse_face(std::string line);
+    static Face parse_face(std::string const& line);
 
-    static Triplet parse_triplet(std::string line);
+    static Triplet parse_triplet(std::string const& line);
 
-    static size_t parse_optional_index(std::string str);
+    static size_t parse_optional_index(std::string const& str);
 
     ObjStruct load_from_string_lines(std::vector<std::string> const& lines) {
         std::vector<glm::vec3> v;
@@ -22,7 +22,7 @@ namespace obj_file {
         std::vector<glm::vec3> vn;
         std::vector<Face> f;
 
-        for (auto line : lines) {
+        for (auto const& line : lines) {
             if (line.rfind("v ", 0) == 0) {
                 auto vec = parse_vec3(line.substr(2));
                 v.push_back(vec);
@@ -44,7 +44,7 @@ namespace obj_file {
         return ObjStruct(v, vt, vn, f);
     }
 
-    static glm::vec3 parse_vec3(std::string line) {
+    static glm::vec3 parse_vec3(std::string const& line) {
         auto components = utils::split(line, ' ');
 
         if (components.size() != 3) {
@@ -58,7 +58,7 @@ namespace obj_file {
         );
     }
 
-    static glm::vec2 parse_vec2(std::string line) {
+    static glm::vec2 parse_vec2(std::string const& line) {
         auto components = utils::split(line, ' ');
 
         if (components.size() != 2) {
@@ -71,18 +71,19 @@ namespace obj_file {
         );
     }
 
-    static Face parse_face(std::string line) {
+    static Face parse_face(std::string const& line) {
         auto triplets_str = utils::split(line, ' ');
         std::vector<Triplet> triplets;
+        triplets.reserve(triplets_str.size());
 
-        for (auto triplet : triplets_str) {
+        for (auto const& triplet : triplets_str) {
             triplets.push_back(parse_triplet(triplet));
         }
 
         return Face(triplets);
     }
 
-    static Triplet parse_triplet(std::string line) {
+    static Triplet parse_triplet(std::string const& line) {
         auto components = utils::split(line, '/');
 
         if (components.size() != 3) {
@@ -96,7 +97,7 @@ namespace obj_file {
         );
     }
 
-    static size_t parse_optional_index(std::string str) {
+    static size_t parse_optional_index(std::string const& str) {
         if (str.empty()) {
             return 0;
         }
@@ -138,7 +139,7 @@ namespace obj_file {
             faces.emplace_back(triplets);
         }
 
-        for (auto face : faces) {
+        for (auto const& face : faces) {
             builder->push_triplet_face(face);
         }
 

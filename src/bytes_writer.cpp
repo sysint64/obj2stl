@@ -82,10 +82,10 @@ namespace mesh_format {
         this->bytes.push_back(byte);
     }
 
-    void BytesWriter::write_bytes(std::vector<std::byte> const& bytes) {
+    void BytesWriter::write_bytes(std::vector<std::byte> const& in_bytes) {
         std::copy(
-            bytes.begin(),
-            bytes.end(),
+            in_bytes.begin(),
+            in_bytes.end(),
             std::back_inserter(this->bytes)
         );
     }

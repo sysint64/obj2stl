@@ -16,14 +16,12 @@ namespace mesh {
     std::vector<Triplet> const& MeshLayoutReader::triplets() {
         this->triplets_data.clear();
 
-        for (auto face : this->layout->faces) {
+        for (auto const& face : this->layout->faces) {
             for (int i = 0; i < face.vertices_indices.size(); i++) {
-                this->triplets_data.push_back(
-                    Triplet(
-                        face.vertices_indices[i],
-                        face.normals_indices[i],
-                        face.tex_coord_indices[i]
-                    )
+                this->triplets_data.emplace_back(
+                    face.vertices_indices[i],
+                    face.normals_indices[i],
+                    face.tex_coord_indices[i]
                 );
             }
         }
@@ -34,20 +32,19 @@ namespace mesh {
     std::vector<TripletFace> const& MeshLayoutReader::triplet_faces() {
         this->triplet_faces_data.clear();
 
-        for (auto face : this->layout->faces) {
+        for (auto const& face : this->layout->faces) {
             std::vector<Triplet> triplets;
+            triplets.reserve(face.vertices_indices.size());
 
             for (int i = 0; i < face.vertices_indices.size(); i++) {
-                triplets.push_back(
-                    Triplet(
-                        face.vertices_indices[i],
-                        face.normals_indices[i],
-                        face.tex_coord_indices[i]
-                    )
+                triplets.emplace_back(
+                    face.vertices_indices[i],
+                    face.normals_indices[i],
+                    face.tex_coord_indices[i]
                 );
             }
 
-            this->triplet_faces_data.push_back(TripletFace(triplets));
+            this->triplet_faces_data.emplace_back(triplets);
         }
 
         return this->triplet_faces_data;
@@ -72,7 +69,7 @@ namespace mesh {
     std::vector<Polygon> const& MeshLayoutReader::polygons() {
         this->polygons_data.clear();
 
-        for (auto face : this->layout->faces) {
+        for (auto const& face : this->layout->faces) {
             std::vector<glm::vec3> vertices;
             std::vector<glm::vec3> normals;
             std::vector<glm::vec2> tex_coords;
@@ -94,8 +91,8 @@ namespace mesh {
             this->polygons_data.push_back(
                 Polygon(
                     vertices,
-                    vertices.size() == normals.size() ? std::make_optional(normals) : std::nullopt,
-                    vertices.size() == tex_coords.size() ? std::make_optional(tex_coords) : std::nullopt,
+                    vertices.size() == normals.size() ? std::make_optional(std::move(normals)) : std::nullopt,
+                    vertices.size() == tex_coords.size() ? std::make_optional(std::move(tex_coords)) : std::nullopt,
                     {}
                 )
             );

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <utility>
 #include <vector>
 #include <memory>
 #include <exception>
@@ -11,7 +12,7 @@
 namespace obj_file {
 
     struct ParseException : public std::exception {
-	const char* what() const throw() {
+        [[nodiscard]] const char* what() const noexcept override {
             return "parse obj file error";
         }
     };
@@ -37,8 +38,8 @@ namespace obj_file {
     struct Face {
         const std::vector<Triplet> triplets;
 
-        Face(std::vector<Triplet> const& triplets)
-            : triplets(triplets) {}
+        explicit Face(std::vector<Triplet> triplets)
+            : triplets(std::move(triplets)) {}
     };
 
     struct ObjStruct {
@@ -48,12 +49,15 @@ namespace obj_file {
         const std::vector<Face> f;
 
         ObjStruct(
-            std::vector<glm::vec3> const& v,
-            std::vector<glm::vec2> const& vt,
-            std::vector<glm::vec3> const& vn,
-            std::vector<Face> const& f
+            std::vector<glm::vec3> v,
+            std::vector<glm::vec2> vt,
+            std::vector<glm::vec3> vn,
+            std::vector<Face> f
         ) :
-            v(v), vt(vt), vn(vn), f(f)
+            v(std::move(v)),
+            vt(std::move(vt)),
+            vn(std::move(vn)),
+            f(std::move(f))
         {
             // Nothing
         }

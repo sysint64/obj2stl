@@ -2,6 +2,7 @@
 
 #include <limits>
 #include <memory>
+#include <utility>
 #include <vector>
 #include <cassert>
 #include <glm/glm.hpp>
@@ -13,7 +14,7 @@ namespace mesh {
     const size_t absent_index = std::numeric_limits<size_t>::max();
 
     struct ValidationException : public std::exception {
-	const char* what() const throw() {
+        [[nodiscard]] const char* what() const noexcept override {
             return "validation error";
         }
     };
@@ -43,8 +44,8 @@ namespace mesh {
     struct TripletFace {
         std::vector<Triplet> triplets;
 
-        TripletFace(std::vector<Triplet> const& triplets)
-            : triplets(triplets) {}
+        explicit TripletFace(std::vector<Triplet> triplets)
+            : triplets(std::move(triplets)) {}
 
         bool operator==(TripletFace const& other) const {
             return this->triplets == other.triplets;
@@ -66,7 +67,7 @@ namespace mesh {
             normals(normals),
             vertices(vertices),
             tex_coords(tex_coords),
-            normal(normal)
+            normal(std::move(normal))
         {
             // IVARIANT: all vectors should have the same size
             if (normals) {
@@ -139,13 +140,6 @@ namespace mesh {
         }
     };
 
-    struct ColoredTriangle {
-        glm::vec3 normal;
-        glm::vec3 vertices[3];
-        glm::vec2 tex_coord;
-        glm::vec4 color;
-    };
-
     struct FaceLayout {
         const std::vector<size_t> vertices_indices;
         const std::vector<size_t> normals_indices;
@@ -178,17 +172,17 @@ namespace mesh {
         const std::vector<FaceLayout> faces;
 
         MeshLayout(
-            std::vector<glm::vec3> const& vertices,
-            std::vector<glm::vec3> const& normals,
-            std::vector<glm::vec2> const& tex_coords,
-            std::vector<glm::vec4> const& colors,
-            std::vector<FaceLayout> const& faces
+            std::vector<glm::vec3> vertices,
+            std::vector<glm::vec3> normals,
+            std::vector<glm::vec2> tex_coords,
+            std::vector<glm::vec4> colors,
+            std::vector<FaceLayout> faces
         ) :
-            vertices(vertices),
-            normals(normals),
-            tex_coords(tex_coords),
-            colors(colors),
-            faces(faces)
+            vertices(std::move(vertices)),
+            normals(std::move(normals)),
+            tex_coords(std::move(tex_coords)),
+            colors(std::move(colors)),
+            faces(std::move(faces))
         {
             // Nothing
         }
@@ -220,9 +214,9 @@ namespace mesh {
 
         void push_triplet_face();
 
-        void push_triplet_face(TripletFace face);
+        void push_triplet_face(TripletFace const& face);
 
-        void push_polygon(Polygon polygon);
+        void push_polygon(Polygon const& polygon);
 
         void push_triangle(Triangle triangle);
     };
@@ -234,7 +228,7 @@ namespace mesh {
 
     class DummyTriangulationStrategy : public TriangulationStrategy {
     public:
-        std::vector<Triangle> triangulate(Polygon &polygon);
+        std::vector<Triangle> triangulate(Polygon &polygon) override;
     };
 
     class MeshLayoutReader {
@@ -250,9 +244,11 @@ namespace mesh {
         MeshLayoutReader(
             std::shared_ptr<MeshLayout> layout,
             std::shared_ptr<TriangulationStrategy> triangulation_strategy
-        ) {
-            this->layout = layout;
-            this->triangulation_strategy = triangulation_strategy;
+        ) :
+            layout(std::move(layout)),
+            triangulation_strategy(std::move(triangulation_strategy))
+        {
+            // Nothing
         }
 
         std::vector<Triangle> const& triangles();

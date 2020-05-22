@@ -33,7 +33,7 @@ namespace mesh {
     }
 
     void MeshLayoutBuilder::validate_indices() {
-        for (const auto face : faces) {
+        for (auto const& face : faces) {
             ::mesh::validate_indices(face.vertices_indices, this->vertices);
             ::mesh::validate_indices(face.normals_indices, this->normals);
             ::mesh::validate_indices(face.tex_coord_indices, this->tex_coords);
@@ -75,17 +75,15 @@ namespace mesh {
         }
 
         this->triplets.clear();
-        this->faces.push_back(
-            FaceLayout(
-                vertices_indices,
-                normals_indices,
-                tex_coord_indices,
-                color_indices
-            )
+        this->faces.emplace_back(
+            vertices_indices,
+            normals_indices,
+            tex_coord_indices,
+            color_indices
         );
     }
 
-    void MeshLayoutBuilder::push_triplet_face(TripletFace face) {
+    void MeshLayoutBuilder::push_triplet_face(TripletFace const& face) {
         this->triplets.clear();
 
         for (auto triplet : face.triplets) {
@@ -95,7 +93,7 @@ namespace mesh {
         push_triplet_face();
     }
 
-    void MeshLayoutBuilder::push_polygon(Polygon polygon) {
+    void MeshLayoutBuilder::push_polygon(Polygon const& polygon) {
         auto vertex_start = this->vertices.size();
         auto normal_start = this->normals.size();
         auto tex_coord_start = this->tex_coords.size();
@@ -134,32 +132,30 @@ namespace mesh {
             );
         }
 
-        this->faces.push_back(
-            FaceLayout(
-                vertices_indices,
-                normals_indices,
-                tex_coord_indices,
-                colors_indices
-            )
+        this->faces.emplace_back(
+            vertices_indices,
+            normals_indices,
+            tex_coord_indices,
+            colors_indices
         );
     }
 
     void MeshLayoutBuilder::push_triangle(Triangle triangle) {
-        std::vector<glm::vec3> normals;
-        std::vector<glm::vec3> vertices;
-        std::vector<glm::vec2> tex_coords;
+        std::vector<glm::vec3> polygon_normals;
+        std::vector<glm::vec3> polygon_vertices;
+        std::vector<glm::vec2> polygon_tex_coords;
 
         std::copy(
             std::begin(triangle.vertices),
             std::end(triangle.vertices),
-            std::back_inserter(vertices)
+            std::back_inserter(polygon_vertices)
         );
 
         if (triangle.normals) {
             std::copy(
                 std::begin(triangle.normals.value()),
                 std::end(triangle.normals.value()),
-                std::back_inserter(normals)
+                std::back_inserter(polygon_normals)
             );
         }
 
@@ -167,15 +163,15 @@ namespace mesh {
             std::copy(
                 std::begin(triangle.tex_coords.value()),
                 std::end(triangle.tex_coords.value()),
-                std::back_inserter(tex_coords)
+                std::back_inserter(polygon_tex_coords)
             );
         }
 
         this->push_polygon(
             Polygon(
-                vertices,
-                !normals.empty() ? std::make_optional(normals) : std::nullopt,
-                !tex_coords.empty() ? std::make_optional(tex_coords) : std::nullopt,
+                polygon_vertices,
+                !polygon_normals.empty() ? std::make_optional(std::move(polygon_normals)) : std::nullopt,
+                !polygon_tex_coords.empty() ? std::make_optional(std::move(polygon_tex_coords)) : std::nullopt,
                 std::nullopt
             )
         );

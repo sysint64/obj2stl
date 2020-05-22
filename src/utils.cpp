@@ -6,32 +6,6 @@
 
 namespace utils {
 
-    std::vector<std::byte> load_file_to_bytes(std::string const& filepath) {
-        std::ifstream ifs(filepath, std::ios::binary | std::ios::ate);
-
-        if (!ifs) {
-            throw std::runtime_error(filepath + ": " + std::strerror(errno));
-        }
-
-        const auto end = ifs.tellg();
-        ifs.seekg(0, std::ios::beg);
-
-        const auto size = std::size_t(end - ifs.tellg());
-
-        if (size == 0) {
-            return {};
-        }
-
-        std::vector<std::byte> buffer(size);
-        auto data = reinterpret_cast<char*>(buffer.data());
-
-        if (!ifs.read(data, buffer.size())) {
-            throw std::runtime_error(filepath + ": " + std::strerror(errno));
-        }
-
-        return buffer;
-    }
-
     std::vector<std::string> load_text_file_lines(std::string const& filepath) {
         std::vector<std::string> lines;
         std::ifstream ifs(filepath);
@@ -61,15 +35,15 @@ namespace utils {
         return glm::normalize(dir);
     }
 
-    std::vector<std::string> split(std::string const& src, char delimeter) {
+    std::vector<std::string> split(std::string const& src, char delimiter) {
         std::stringstream test(src);
         std::string segment;
-        std::vector<std::string> seglist;
+        std::vector<std::string> seg_list;
 
-        while (std::getline(test, segment, delimeter)) {
-            seglist.push_back(segment);
+        while (std::getline(test, segment, delimiter)) {
+            seg_list.push_back(segment);
         }
 
-        return seglist;
+        return seg_list;
     }
 }
