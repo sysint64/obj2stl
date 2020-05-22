@@ -4,6 +4,7 @@
 #include <vector>
 #include <array>
 #include <algorithm>
+#include <glm/glm.hpp>
 
 namespace utils {
 
@@ -25,5 +26,7 @@ namespace utils {
     bool is_big_endian();
 
     bool is_little_endian();
+
+    glm::vec3 calculate_normal(glm::vec3 v1, glm::vec3 v2, glm::vec3 v3);
 
 }

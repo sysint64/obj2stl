@@ -7,6 +7,7 @@
 #include <glm/glm.hpp>
 #include <sstream>
 #include <exception>
+#include <optional>
 
 namespace mesh {
     const size_t absent_index = std::numeric_limits<size_t>::max();
@@ -52,8 +53,30 @@ namespace mesh {
 
     struct Polygon {
         const std::vector<glm::vec3> vertices;
-        const std::vector<glm::vec3> normals;
-        const std::vector<glm::vec2> tex_coords;
+        const std::optional<std::vector<glm::vec3>> normals;
+        const std::optional<std::vector<glm::vec2>> tex_coords;
+        const std::optional<std::vector<glm::vec3>> normal;
+
+        Polygon(
+            std::vector<glm::vec3> const& vertices,
+            std::optional<std::vector<glm::vec3>> const& normals,
+            std::optional<std::vector<glm::vec2>> const& tex_coords,
+            std::optional<std::vector<glm::vec3>> normal
+        ) :
+            normals(normals),
+            vertices(vertices),
+            tex_coords(tex_coords),
+            normal(normal)
+        {
+            // IVARIANT: all vectors should have the same size
+            if (normals) {
+                assert(vertices.size() == normals.value().size());
+            }
+
+            if (tex_coords) {
+                assert(vertices.size() == tex_coords.value().size());
+            }
+        }
 
         Polygon(
             std::vector<glm::vec3> const& vertices,
@@ -61,8 +84,9 @@ namespace mesh {
             std::vector<glm::vec2> const& tex_coords
         ) :
             normals(normals),
-            vertices(vertices),
-            tex_coords(tex_coords)
+            vertices({vertices}),
+            tex_coords({tex_coords}),
+            normal({})
         {
             // IVARIANT: all vectors should have the same size
             assert(vertices.size() == normals.size());
@@ -78,24 +102,40 @@ namespace mesh {
 
     struct Triangle {
         const std::array<glm::vec3, 3> vertices;
-        const std::array<glm::vec3, 3> normals;
-        const std::array<glm::vec2, 3> tex_coords;
+        const std::optional<std::array<glm::vec3, 3>> normals;
+        const std::optional<std::array<glm::vec2, 3>> tex_coords;
+        const std::optional<glm::vec3> normal;
+
+        Triangle(
+            std::array<glm::vec3, 3> const& vertices,
+            std::optional<std::array<glm::vec3, 3>> const& normals,
+            std::optional<std::array<glm::vec2, 3>> const& tex_coords,
+            std::optional<glm::vec3> normal
+        ) :
+            normals(normals),
+            vertices(vertices),
+            tex_coords(tex_coords),
+            normal(normal)
+        {
+        }
 
         Triangle(
             std::array<glm::vec3, 3> const& vertices,
             std::array<glm::vec3, 3> const& normals,
             std::array<glm::vec2, 3> const& tex_coords
         ) :
-            normals(normals),
+            normals({normals}),
             vertices(vertices),
-            tex_coords(tex_coords)
+            tex_coords({tex_coords}),
+            normal({})
         {
         }
 
         bool operator==(Triangle const& other) const {
             return this->vertices == other.vertices &&
                 this->normals == other.normals &&
-                this->tex_coords == other.tex_coords;
+                this->tex_coords == other.tex_coords &&
+                this->normal == other.normal;
         }
     };
 

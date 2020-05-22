@@ -35,8 +35,9 @@ TEST(DummyTriangulationStrategy, test_triangulate) {
 
     auto polygon = mesh::Polygon(
         vertices,
-        normals,
-        tex_coords
+        {normals},
+        {tex_coords},
+        {}
     );
 
     auto triangles = triangulation_strategy->triangulate(polygon);

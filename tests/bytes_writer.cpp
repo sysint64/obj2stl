@@ -54,6 +54,25 @@ TEST(BytesWriter, test_write_byte) {
     );
 }
 
+TEST(BytesWriter, test_write_bytes) {
+    auto writer = std::make_unique<mesh_format::BytesWriter>(
+        mesh_format::FileType::Binary,
+        mesh_format::ByteOrder::LittleEndian
+    );
+
+    writer->write_bytes({std::byte(0xff), std::byte(0x0b), std::byte(0xca)});
+    auto bytes = writer->get_bytes();
+
+    ASSERT_THAT(
+        bytes,
+        testing::ElementsAre(
+            std::byte(0xff),
+            std::byte(0x0b),
+            std::byte(0xca)
+        )
+    );
+}
+
 TEST(BytesWriter, test_write_string) {
     auto writer = std::make_unique<mesh_format::BytesWriter>(
         mesh_format::FileType::Binary,
@@ -89,10 +108,10 @@ TEST(BytesWriter, test_write_int32_t_little_endian) {
     ASSERT_THAT(
         bytes,
         testing::ElementsAre(
+            std::byte(1),
             std::byte(0),
             std::byte(0),
-            std::byte(0),
-            std::byte(1)
+            std::byte(0)
         )
     );
 }
@@ -110,10 +129,10 @@ TEST(BytesWriter, test_write_int32_t_big_endian) {
     ASSERT_THAT(
         bytes,
         testing::ElementsAre(
-            std::byte(1),
             std::byte(0),
             std::byte(0),
-            std::byte(0)
+            std::byte(0),
+            std::byte(1)
         )
     );
 }
@@ -132,10 +151,10 @@ TEST(BytesWriter, test_write_float_little_endian) {
     ASSERT_THAT(
         bytes,
         testing::ElementsAre(
-            std::byte(0x3f),
-            std::byte(0x80),
             std::byte(0),
-            std::byte(0)
+            std::byte(0),
+            std::byte(0x80),
+            std::byte(0x3f)
         )
     );
 }
@@ -154,10 +173,10 @@ TEST(BytesWriter, test_write_float_big_endian) {
     ASSERT_THAT(
         bytes,
         testing::ElementsAre(
-            std::byte(0),
-            std::byte(0),
+            std::byte(0x3f),
             std::byte(0x80),
-            std::byte(0x3f)
+            std::byte(0x0),
+            std::byte(0x0)
         )
     );
 }

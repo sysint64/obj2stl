@@ -8,16 +8,29 @@ namespace mesh_format {
         return this->bytes;
     }
 
+    std::vector<char> const& BytesWriter::get_data() {
+        this->chars.clear();
+
+        std::transform(
+            this->bytes.begin(),
+            this->bytes.end(),
+            std::back_inserter(this->chars),
+            [](std::byte byte) { return char(byte); }
+        );
+
+        return this->chars;
+    }
+
+    void BytesWriter::clear() {
+        this->bytes.clear();
+    }
+
     bool BytesWriter::is_endian_mismatch() {
-        if (this->byte_order == ByteOrder::Native) {
-            return false;
-        }
+        bool mismatch_big_endian = utils::is_big_endian() &&
+            this->byte_order == ByteOrder::LittleEndian;
 
-        bool mismatch_big_endian = !utils::is_big_endian() &&
-            this->byte_order != ByteOrder::BigEndian;
-
-        bool mismatch_little_endian = !utils::is_little_endian() &&
-            this->byte_order != ByteOrder::LittleEndian;
+        bool mismatch_little_endian = utils::is_little_endian() &&
+            this->byte_order == ByteOrder::BigEndian;
 
         return mismatch_big_endian || mismatch_little_endian;
     }
@@ -39,7 +52,7 @@ namespace mesh_format {
         std::copy(
             union_value.raw.begin(),
             union_value.raw.end(),
-            std::back_inserter(bytes)
+            std::back_inserter(this->bytes)
         );
     }
 
@@ -60,13 +73,21 @@ namespace mesh_format {
         std::copy(
             union_value.raw.begin(),
             union_value.raw.end(),
-            std::back_inserter(bytes)
+            std::back_inserter(this->bytes)
         );
     }
 
     void BytesWriter::write_byte(std::byte byte) {
         assert(this->file_type == FileType::Binary);
         this->bytes.push_back(byte);
+    }
+
+    void BytesWriter::write_bytes(std::vector<std::byte> const& bytes) {
+        std::copy(
+            bytes.begin(),
+            bytes.end(),
+            std::back_inserter(this->bytes)
+        );
     }
 
     void BytesWriter::write_char(char ch) {
@@ -77,7 +98,7 @@ namespace mesh_format {
         std::transform(
             str.begin(),
             str.end(),
-            std::back_inserter(bytes),
+            std::back_inserter(this->bytes),
             [] (const char c) { return std::byte(c); }
         );
     }

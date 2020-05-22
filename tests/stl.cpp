@@ -1,9 +1,10 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 #include <glm/glm.hpp>
+#include <fstream>
 
 #include "obj.hpp"
-#include "format.hpp"
+#include "stl.hpp"
 #include "utils.hpp"
 
 int main(int argc, char **argv) {
@@ -11,5 +12,17 @@ int main(int argc, char **argv) {
     return RUN_ALL_TESTS();
 }
 
-TEST(StlFileFormatTest, test_write_to_bytes) {
+TEST(StlMeshWriter, test_write_to_bytes) {
+    auto bytes = utils::load_file_to_bytes("../../tests/resources/box.obj");
+    auto obj = obj_file::load_from_bytes(bytes);
+    auto layout = obj_file::create_mesh_layout_from_obj(obj);
+    auto writer = std::make_unique<stl_file::StlMeshWriter>();
+    auto stl_bytes = writer->write(layout);
+
+    std::ofstream outfile(
+        "../../tests/resources/generated.stl",
+        std::ios::out | std::ios::binary
+    );
+
+    outfile.write(stl_bytes.data(), stl_bytes.size());
 }

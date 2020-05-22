@@ -30,11 +30,17 @@ namespace mesh_format {
 
         std::vector<std::byte> const& get_bytes();
 
+        std::vector<char> const& get_data();
+
+        void clear();
+
         void write_int32_t(int32_t value);
 
         void write_float(float value);
 
         void write_byte(std::byte byte);
+
+        void write_bytes(std::vector<std::byte> const& bytes);
 
         void write_char(char ch);
 
@@ -42,6 +48,7 @@ namespace mesh_format {
 
     private:
         std::vector<std::byte> bytes;
+        std::vector<char> chars;
 
         FileType file_type;
         ByteOrder byte_order;
@@ -51,7 +58,7 @@ namespace mesh_format {
 
     class MeshWriter {
     public:
-        std::vector<std::byte> write(mesh::MeshLayout data);
+        std::vector<char> write(std::shared_ptr<mesh::MeshLayout> layout);
 
         MeshWriter(FileType file_type, ByteOrder byte_order) {
             this->writer = std::make_unique<BytesWriter>(file_type, byte_order);
@@ -62,6 +69,20 @@ namespace mesh_format {
         std::unique_ptr<mesh::MeshLayoutReader> layout_reader;
 
         virtual void write_header() {}
+
+        virtual void write_layout() = 0;
+
+        virtual void write_vertices();
+
+        virtual void write_normals();
+
+        virtual void write_tex_coords();
+
+        virtual void write_triplets();
+
+        virtual void write_triangles();
+
+        virtual void write_polygons();
 
         virtual void write_vertices(std::vector<glm::vec3> const& vertices);
 

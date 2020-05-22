@@ -118,17 +118,21 @@ namespace mesh {
             std::back_inserter(this->vertices)
         );
 
-        std::copy(
-            std::begin(polygon.normals),
-            std::end(polygon.normals),
-            std::back_inserter(this->normals)
-        );
+        if (polygon.normals) {
+            std::copy(
+                std::begin(polygon.normals.value()),
+                std::end(polygon.normals.value()),
+                std::back_inserter(this->normals)
+            );
+        }
 
-        std::copy(
-            std::begin(polygon.tex_coords),
-            std::end(polygon.tex_coords),
-            std::back_inserter(this->tex_coords)
-        );
+        if (polygon.tex_coords) {
+            std::copy(
+                std::begin(polygon.tex_coords.value()),
+                std::end(polygon.tex_coords.value()),
+                std::back_inserter(this->tex_coords)
+            );
+        }
 
         this->faces.push_back(
             FaceLayout(
@@ -151,23 +155,28 @@ namespace mesh {
             std::back_inserter(vertices)
         );
 
-        std::copy(
-            std::begin(triangle.normals),
-            std::end(triangle.normals),
-            std::back_inserter(normals)
-        );
+        if (triangle.normals) {
+            std::copy(
+                std::begin(triangle.normals.value()),
+                std::end(triangle.normals.value()),
+                std::back_inserter(normals)
+            );
+        }
 
-        std::copy(
-            std::begin(triangle.tex_coords),
-            std::end(triangle.tex_coords),
-            std::back_inserter(tex_coords)
-        );
+        if (triangle.tex_coords) {
+            std::copy(
+                std::begin(triangle.tex_coords.value()),
+                std::end(triangle.tex_coords.value()),
+                std::back_inserter(tex_coords)
+            );
+        }
 
         this->push_polygon(
             Polygon(
                 vertices,
-                normals,
-                tex_coords
+                !normals.empty() ? std::make_optional(normals) : std::nullopt,
+                !tex_coords.empty() ? std::make_optional(tex_coords) : std::nullopt,
+                std::nullopt
             )
         );
     }

@@ -78,12 +78,27 @@ namespace mesh {
             std::vector<glm::vec2> tex_coords;
 
             for (int i = 0; i < face.vertices_indices.size(); i++) {
+                assert(face.vertices_indices[i] != ::mesh::absent_index);
+
                 vertices.push_back(this->layout->vertices[face.vertices_indices[i]]);
-                normals.push_back(this->layout->normals[face.normals_indices[i]]);
-                tex_coords.push_back(this->layout->tex_coords[face.tex_coord_indices[i]]);
+
+                if (face.normals_indices[i] != ::mesh::absent_index) {
+                    normals.push_back(this->layout->normals[face.normals_indices[i]]);
+                }
+
+                if (face.tex_coord_indices[i] != ::mesh::absent_index) {
+                    tex_coords.push_back(this->layout->tex_coords[face.tex_coord_indices[i]]);
+                }
             }
 
-            this->polygons_data.push_back(Polygon(vertices, normals, tex_coords));
+            this->polygons_data.push_back(
+                Polygon(
+                    vertices,
+                    vertices.size() == normals.size() ? std::make_optional(normals) : std::nullopt,
+                    vertices.size() == tex_coords.size() ? std::make_optional(tex_coords) : std::nullopt,
+                    {}
+                )
+            );
         }
 
         return this->polygons_data;
