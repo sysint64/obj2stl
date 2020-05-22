@@ -9,10 +9,7 @@ set(CMAKE_CXX_CLANG_TIDY clang-tidy)
 set(DEBUG_FLAGS "${CMAKE_CXX_FLAGS} -g3 -O0")
 
 if (APPLE)
-  set(CMAKE_CXX_FLAGS "${DEBUG_FLAGS} -std=c++17 -stdlib=libc++ -Wall")
-
-  # TODO: remove hardcode
-  include_directories(~/Documents/libcxx/include)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${DEBUG_FLAGS} -std=c++17 -stdlib=libc++ -Wall")
 else()
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${DEBUG_FLAGS} -std=c++17")
 endif()
