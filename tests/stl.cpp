@@ -13,8 +13,8 @@ int main(int argc, char **argv) {
 }
 
 TEST(StlMeshWriter, test_write_to_bytes) {
-    auto bytes = utils::load_file_to_bytes("../../tests/resources/box.obj");
-    auto obj = obj_file::load_from_bytes(bytes);
+    auto lines = utils::load_text_file_lines("../../tests/resources/box.obj");
+    auto obj = obj_file::load_from_string_lines(lines);
     auto layout = obj_file::create_mesh_layout_from_obj(obj);
     auto writer = std::make_unique<stl_file::StlMeshWriter>();
     auto stl_bytes = writer->write(layout);

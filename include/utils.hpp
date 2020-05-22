@@ -10,6 +10,10 @@ namespace utils {
 
     std::vector<std::byte> load_file_to_bytes(std::string const& filepath);
 
+    std::vector<std::string> load_text_file_lines(std::string const& filepath);
+
+    std::vector<std::string> split(std::string const& src, char delimeter);
+
     // Original version: https://mklimenko.github.io/english/2018/08/22/robust-endian-swap/
     template<typename T>
     void swap_endian(T &val) {

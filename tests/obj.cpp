@@ -11,9 +11,9 @@ int main(int argc, char **argv) {
     return RUN_ALL_TESTS();
 }
 
-TEST(ObjFileFormatTest, test_load_from_bytes) {
-    auto bytes = utils::load_file_to_bytes("../../tests/resources/box.obj");
-    auto obj = obj_file::load_from_bytes(bytes);
+TEST(ObjFileFormatTest, load_text_file_lines) {
+    auto lines = utils::load_text_file_lines("../../tests/resources/box.obj");
+    auto obj = obj_file::load_from_string_lines(lines);
 
     ASSERT_THAT(
         obj.v,
@@ -125,8 +125,8 @@ TEST(ObjFileFormatTest, test_load_from_bytes) {
 }
 
 TEST(ObjFileFormatTest, test_create_mesh_layout_from_obj) {
-    auto bytes = utils::load_file_to_bytes("../../tests/resources/box.obj");
-    auto obj = obj_file::load_from_bytes(bytes);
+    auto lines = utils::load_text_file_lines("../../tests/resources/box.obj");
+    auto obj = obj_file::load_from_string_lines(lines);
     auto layout = obj_file::create_mesh_layout_from_obj(obj);
     auto triangulation_strategy = std::make_shared<mesh::DummyTriangulationStrategy>();
     auto reader = std::make_unique<mesh::MeshLayoutReader>(layout, triangulation_strategy);

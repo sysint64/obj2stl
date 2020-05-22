@@ -2,12 +2,19 @@
 
 #include <vector>
 #include <memory>
+#include <exception>
 
 #include <glm/glm.hpp>
 
 #include "mesh.hpp"
 
 namespace obj_file {
+
+    struct ParseException : public std::exception {
+	const char* what() const throw() {
+            return "parse obj file error";
+        }
+    };
 
     struct Triplet {
         size_t v;
@@ -28,17 +35,31 @@ namespace obj_file {
     };
 
     struct Face {
-        std::vector<Triplet> triplets;
+        const std::vector<Triplet> triplets;
+
+        Face(std::vector<Triplet> const& triplets)
+            : triplets(triplets) {}
     };
 
     struct ObjStruct {
-        std::vector<glm::vec3> v;
-        std::vector<glm::vec2> vt;
-        std::vector<glm::vec3> vn;
-        std::vector<Face> f;
+        const std::vector<glm::vec3> v;
+        const std::vector<glm::vec2> vt;
+        const std::vector<glm::vec3> vn;
+        const std::vector<Face> f;
+
+        ObjStruct(
+            std::vector<glm::vec3> const& v,
+            std::vector<glm::vec2> const& vt,
+            std::vector<glm::vec3> const& vn,
+            std::vector<Face> const& f
+        ) :
+            v(v), vt(vt), vn(vn), f(f)
+        {
+            // Nothing
+        }
     };
 
-    ObjStruct load_from_bytes(std::vector<std::byte> const& bytes);
+    ObjStruct load_from_string_lines(std::vector<std::string> const& lines);
 
     std::shared_ptr<mesh::MeshLayout> create_mesh_layout_from_obj(ObjStruct const& obj);
 }
