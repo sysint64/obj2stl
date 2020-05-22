@@ -10,52 +10,58 @@ namespace mesh_format {
         Text,
     };
 
-    class Writer {
+    enum class ByteOrder {
+        LittleEndian,
+        BigEndian,
+        Native,
+    };
+
+    class BytesWriter {
     public:
-        std::vector<std::byte> write(mesh::MeshLayout data);
+        BytesWriter(FileType file_type, ByteOrder byte_order) {
+            this->file_type = file_type;
+            this->byte_order = byte_order;
+        }
 
-        void write_little_endian_byte(std::byte b);
+        BytesWriter(FileType file_type) {
+            this->file_type = file_type;
+            this->byte_order = ByteOrder::Native;
+        }
 
-        void write_big_endian_byte(std::byte b);
+        std::vector<std::byte> const& get_bytes();
 
-        void write_little_endian_bytes(std::vector<std::byte> const& b);
+        void write_int32_t(int32_t value);
 
-        void write_big_endian_bytes(std::vector<std::byte> const& b);
+        void write_float(float value);
+
+        void write_byte(std::byte byte);
 
         void write_char(char ch);
 
-        void write_string(std::string str);
+        void write_string(std::string const& str);
 
     private:
         std::vector<std::byte> bytes;
-        mesh::MeshLayout data;
+
         FileType file_type;
+        ByteOrder byte_order;
+
+        bool is_endian_mismatch();
     };
 
-    class TrianglesWriter {
+    class MeshWriter {
     public:
         std::vector<std::byte> write(mesh::MeshLayout data);
 
-    protected:
-        virtual FileType get_file_type() = 0;
-
-        virtual void write_header() = 0;
-
-        virtual void write_triangles(std::vector<mesh::Triangle> const& triangles);
-
-        virtual void write_triangle(mesh::Triangle const& triangle) = 0;
-
-        virtual void write_end() = 0;
-    };
-
-    class IndexedMeshWriter {
-    public:
-        std::vector<std::byte> write(mesh::MeshLayout data);
+        MeshWriter(FileType file_type, ByteOrder byte_order) {
+            this->writer = std::make_unique<BytesWriter>(file_type, byte_order);
+        }
 
     protected:
-        virtual FileType get_file_type() = 0;
+        std::unique_ptr<BytesWriter> writer;
+        std::unique_ptr<mesh::MeshLayoutReader> layout_reader;
 
-        virtual void write_header() = 0;
+        virtual void write_header() {}
 
         virtual void write_vertices(std::vector<glm::vec3> const& vertices);
 
@@ -63,16 +69,25 @@ namespace mesh_format {
 
         virtual void write_tex_coords(std::vector<glm::vec2> const& tex_coords);
 
-        virtual void write_triplets(std::vector<mesh::Triplet> const& triplet) = 0;
+        virtual void write_triplets(std::vector<mesh::Triplet> const& triplets);
 
-        virtual void write_vertex(glm::vec3 const& vertex) = 0;
+        virtual void write_triangles(std::vector<mesh::Triangle> const& triangles);
 
-        virtual void write_normal(glm::vec3 const& normal) = 0;
+        virtual void write_polygons(std::vector<mesh::Polygon> const& polygons);
 
-        virtual void write_tex_coord(glm::vec2 const& tex_coord) = 0;
+        virtual void write_triangle(mesh::Triangle const& triangle) {}
 
-        virtual void write_triplet(mesh::Triplet const& index) = 0;
+        virtual void write_polygon(mesh::Polygon const& polygon) {}
 
-        virtual void write_end() = 0;
+        virtual void write_vertex(glm::vec3 const& vertex) {}
+
+        virtual void write_normal(glm::vec3 const& normal) {}
+
+        virtual void write_tex_coord(glm::vec2 const& tex_coord) {}
+
+        virtual void write_triplet(mesh::Triplet const& index) {}
+
+        virtual void write_end() {}
     };
+
 }

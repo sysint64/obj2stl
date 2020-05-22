@@ -4,10 +4,6 @@
 #include "mesh.hpp"
 
 namespace mesh {
-    MeshLayoutBuilder::MeshLayoutBuilder() {
-        this->colors.push_back(glm::vec4(0, 0, 0, 1));
-    }
-
     std::shared_ptr<MeshLayout> MeshLayoutBuilder::build() {
         this->validate_indices();
 
@@ -26,6 +22,10 @@ namespace mesh {
         std::vector<T> const& data
     ) {
         for (const auto index : indices) {
+            if (index == ::mesh::absent_index) {
+                continue;
+            }
+
             if (index >= data.size()) {
                 throw ValidationException();
             }
@@ -71,7 +71,7 @@ namespace mesh {
             vertices_indices.push_back(triplet.vertex_index);
             normals_indices.push_back(triplet.normal_index);
             tex_coord_indices.push_back(triplet.tex_coord_index);
-            color_indices.push_back(0);
+            color_indices.push_back(::mesh::absent_index);
         }
 
         this->triplets.clear();
@@ -83,6 +83,16 @@ namespace mesh {
                 color_indices
             )
         );
+    }
+
+    void MeshLayoutBuilder::push_triplet_face(TripletFace face) {
+        this->triplets.clear();
+
+        for (auto triplet : face.triplets) {
+            this->push_triplet(triplet);
+        }
+
+        push_triplet_face();
     }
 
     void MeshLayoutBuilder::push_polygon(Polygon polygon) {
@@ -100,6 +110,7 @@ namespace mesh {
         std::iota(vertices_indices.begin(), vertices_indices.end(), vertex_start);
         std::iota(normals_indices.begin(), normals_indices.end(), normal_start);
         std::iota(tex_coord_indices.begin(), tex_coord_indices.end(), tex_coord_start);
+        std::fill(colors_indices.begin(), colors_indices.end(), ::mesh::absent_index);
 
         std::copy(
             std::begin(polygon.vertices),

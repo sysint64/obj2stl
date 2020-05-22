@@ -11,7 +11,7 @@ int main(int argc, char **argv) {
 }
 
 // TODO: Should be added test for more complicated geometry
-TEST(triangulationTest, test) {
+TEST(DummyTriangulationStrategy, test_triangulate) {
     auto triangulation_strategy = std::make_unique<mesh::DummyTriangulationStrategy>();
 
     std::vector<glm::vec3> vertices {

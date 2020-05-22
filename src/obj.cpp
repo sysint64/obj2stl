@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include "obj.hpp"
 
 namespace obj_file {
@@ -88,5 +90,47 @@ namespace obj_file {
                 },
             }
         };
+    }
+
+    std::shared_ptr<mesh::MeshLayout> create_mesh_layout_from_obj(ObjStruct const& obj) {
+        auto builder = std::make_unique<mesh::MeshLayoutBuilder>();
+
+        for (auto v : obj.v) {
+            builder->push_vertex(v);
+        }
+
+        for (auto vn : obj.vn) {
+            builder->push_normal(vn);
+        }
+
+        for (auto vt : obj.vt) {
+            builder->push_tex_coord(vt);
+        }
+
+        std::vector<mesh::TripletFace> faces;
+        faces.reserve(obj.f.size());
+
+        for (auto f : obj.f) {
+            std::vector<mesh::Triplet> triplets;
+            triplets.reserve(obj.f.size());
+
+            for (auto triplet : f.triplets) {
+                triplets.push_back(
+                    mesh::Triplet(
+                        triplet.v - 1,
+                        triplet.vn - 1 ,
+                        triplet.vt - 1
+                    )
+                );
+            }
+
+            faces.push_back(mesh::TripletFace(triplets));
+        }
+
+        for (auto face : faces) {
+            builder->push_triplet_face(face);
+        }
+
+        return builder->build();
     }
 }

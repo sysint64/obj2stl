@@ -1,5 +1,6 @@
 #pragma once
 
+#include <limits>
 #include <memory>
 #include <vector>
 #include <cassert>
@@ -8,6 +9,8 @@
 #include <exception>
 
 namespace mesh {
+    const size_t absent_index = std::numeric_limits<size_t>::max();
+
     struct ValidationException : public std::exception {
 	const char* what() const throw() {
             return "Validation Exception";
@@ -33,6 +36,17 @@ namespace mesh {
             return this->vertex_index == other.vertex_index &&
                 this->normal_index == other.normal_index &&
                 this->tex_coord_index == other.tex_coord_index;
+        }
+    };
+
+    struct TripletFace {
+        std::vector<Triplet> triplets;
+
+        TripletFace(std::vector<Triplet> const& triplets)
+            : triplets(triplets) {}
+
+        bool operator==(TripletFace const& other) const {
+            return this->triplets == other.triplets;
         }
     };
 
@@ -152,8 +166,6 @@ namespace mesh {
         void validate_indices();
 
     public:
-        MeshLayoutBuilder();
-
         std::shared_ptr<MeshLayout> build();
 
         void push_vertex(glm::vec3 vertex);
@@ -167,6 +179,8 @@ namespace mesh {
         void push_triplet(Triplet triplet);
 
         void push_triplet_face();
+
+        void push_triplet_face(TripletFace face);
 
         void push_polygon(Polygon polygon);
 
@@ -190,6 +204,7 @@ namespace mesh {
         std::vector<Triangle> triangles_data;
         std::vector<Polygon> polygons_data;
         std::vector<Triplet> triplets_data;
+        std::vector<TripletFace> triplet_faces_data;
 
     public:
         MeshLayoutReader(
@@ -211,5 +226,7 @@ namespace mesh {
         std::vector<glm::vec2> const& tex_coords();
 
         std::vector<Triplet> const& triplets();
+
+        std::vector<TripletFace> const& triplet_faces();
     };
 }

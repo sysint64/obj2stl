@@ -10,7 +10,7 @@ int main(int argc, char **argv) {
     return RUN_ALL_TESTS();
 }
 
-TEST(builderTest, testFlatWithoutColor) {
+TEST(MeshLayoutBuilder, test_flat_without_color) {
     auto builder = std::make_unique<mesh::MeshLayoutBuilder>();
 
     builder->push_vertex(glm::vec3(1, 0, 0));
@@ -64,27 +64,35 @@ TEST(builderTest, testFlatWithoutColor) {
         )
     );
 
-    ASSERT_THAT(
-        layout->colors,
-        testing::ElementsAre(
-            glm::vec4(0, 0, 0, 1)
-        )
-    );
-
+    ASSERT_TRUE(layout->colors.empty());
     ASSERT_EQ(layout->faces.size(), 2);
 
     ASSERT_THAT(layout->faces[0].vertices_indices, testing::ElementsAre(0, 1, 2));
     ASSERT_THAT(layout->faces[0].normals_indices, testing::ElementsAre(0, 1, 0));
     ASSERT_THAT(layout->faces[0].tex_coord_indices, testing::ElementsAre(0, 1, 2));
-    ASSERT_THAT(layout->faces[0].color_indices, testing::ElementsAre(0, 0, 0));
+    ASSERT_THAT(
+        layout->faces[0].color_indices,
+        testing::ElementsAre(
+            mesh::absent_index,
+            mesh::absent_index,
+            mesh::absent_index
+        )
+    );
 
     ASSERT_THAT(layout->faces[1].vertices_indices, testing::ElementsAre(2, 0, 0));
     ASSERT_THAT(layout->faces[1].normals_indices, testing::ElementsAre(0, 1, 1));
     ASSERT_THAT(layout->faces[1].tex_coord_indices, testing::ElementsAre(2, 3, 2));
-    ASSERT_THAT(layout->faces[1].color_indices, testing::ElementsAre(0, 0, 0));
+    ASSERT_THAT(
+        layout->faces[1].color_indices,
+        testing::ElementsAre(
+            mesh::absent_index,
+            mesh::absent_index,
+            mesh::absent_index
+        )
+    );
 }
 
-TEST(builderTest, testVertexCoordIndexValidation) {
+TEST(MeshLayoutBuilder, test_vertex_coord_index_validation) {
     auto builder = std::make_unique<mesh::MeshLayoutBuilder>();
 
     builder->push_vertex(glm::vec3(1, 0, 0));
@@ -106,7 +114,7 @@ TEST(builderTest, testVertexCoordIndexValidation) {
     EXPECT_THROW(builder->build(), mesh::ValidationException);
 }
 
-TEST(builderTest, testNormalIndexValidation) {
+TEST(MeshLayoutBuilder, test_normal_index_validation) {
     auto builder = std::make_unique<mesh::MeshLayoutBuilder>();
 
     builder->push_vertex(glm::vec3(1, 0, 0));
@@ -128,7 +136,7 @@ TEST(builderTest, testNormalIndexValidation) {
     EXPECT_THROW(builder->build(), mesh::ValidationException);
 }
 
-TEST(builderTest, testFlatTexCoordIndexValidation) {
+TEST(MeshLayoutBuilder, test_flat_tex_coord_index_validation) {
     auto builder = std::make_unique<mesh::MeshLayoutBuilder>();
 
     builder->push_vertex(glm::vec3(1, 0, 0));
@@ -150,7 +158,7 @@ TEST(builderTest, testFlatTexCoordIndexValidation) {
     EXPECT_THROW(builder->build(), mesh::ValidationException);
 }
 
-TEST(builderTest, testTriangle) {
+TEST(MeshLayoutBuilder, test_triangle) {
     auto builder = std::make_unique<mesh::MeshLayoutBuilder>();
 
     builder->push_triangle(
@@ -238,22 +246,30 @@ TEST(builderTest, testTriangle) {
         )
     );
 
-    ASSERT_THAT(
-        layout->colors,
-        testing::ElementsAre(
-            glm::vec4(0, 0, 0, 1)
-        )
-    );
-
+    ASSERT_TRUE(layout->colors.empty());
     ASSERT_EQ(layout->faces.size(), 2);
 
     ASSERT_THAT(layout->faces[0].vertices_indices, testing::ElementsAre(0, 1, 2));
     ASSERT_THAT(layout->faces[0].normals_indices, testing::ElementsAre(0, 1, 2));
     ASSERT_THAT(layout->faces[0].tex_coord_indices, testing::ElementsAre(0, 1, 2));
-    ASSERT_THAT(layout->faces[0].color_indices, testing::ElementsAre(0, 0, 0));
+    ASSERT_THAT(
+        layout->faces[0].color_indices,
+        testing::ElementsAre(
+            mesh::absent_index,
+            mesh::absent_index,
+            mesh::absent_index
+        )
+    );
 
     ASSERT_THAT(layout->faces[1].vertices_indices, testing::ElementsAre(5, 6, 7));
     ASSERT_THAT(layout->faces[1].normals_indices, testing::ElementsAre(3, 4, 5));
     ASSERT_THAT(layout->faces[1].tex_coord_indices, testing::ElementsAre(4, 5, 6));
-    ASSERT_THAT(layout->faces[1].color_indices, testing::ElementsAre(0, 0, 0));
+    ASSERT_THAT(
+        layout->faces[1].color_indices,
+        testing::ElementsAre(
+            mesh::absent_index,
+            mesh::absent_index,
+            mesh::absent_index
+        )
+    );
 }

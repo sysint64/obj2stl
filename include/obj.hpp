@@ -1,7 +1,11 @@
 #pragma once
 
 #include <vector>
+#include <memory>
+
 #include <glm/glm.hpp>
+
+#include "mesh.hpp"
 
 namespace obj_file {
 
@@ -17,7 +21,9 @@ namespace obj_file {
         }
 
         bool operator==(Triplet const& other) const {
-            return this->v == other.v;
+            return this->v == other.v &&
+                this->vt == other.vt &&
+                this->vn == other.vn;
         }
     };
 
@@ -33,4 +39,6 @@ namespace obj_file {
     };
 
     ObjStruct load_from_bytes(std::vector<std::byte> const& bytes);
+
+    std::shared_ptr<mesh::MeshLayout> create_mesh_layout_from_obj(ObjStruct const& obj);
 }

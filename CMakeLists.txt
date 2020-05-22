@@ -9,7 +9,7 @@ set(CMAKE_CXX_CLANG_TIDY clang-tidy)
 set(DEBUG_FLAGS "${CMAKE_CXX_FLAGS} -g3 -O0")
 
 if (APPLE)
-  set(CMAKE_CXX_FLAGS "${DEBUG_FLAGS} -std=c++17 -stdlib=libc++")
+  set(CMAKE_CXX_FLAGS "${DEBUG_FLAGS} -std=c++17 -stdlib=libc++ -Wall")
 
   # TODO: remove hardcode
   include_directories(~/Documents/libcxx/include)
@@ -31,7 +31,10 @@ set(SOURCE_FILES src/obj.cpp
   src/utils.cpp
   src/mesh.cpp
   src/triangulation.cpp
-  src/mesh_layout_reader.cpp)
+  src/mesh_layout_reader.cpp
+  src/stl.cpp
+  src/format.cpp
+  src/bytes_writer.cpp)
 
 add_executable(main src/main.cpp ${SOURCE_FILES})
 include_directories(include/)

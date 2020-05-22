@@ -7,7 +7,10 @@ set(SOURCE_FILES ../src/obj.cpp
   ../src/utils.cpp
   ../src/mesh.cpp
   ../src/triangulation.cpp
-  ../src/mesh_layout_reader.cpp)
+  ../src/mesh_layout_reader.cpp
+  ../src/stl.cpp
+  ../src/format.cpp
+  ../src/bytes_writer.cpp)
 
 macro(add_simple_test name)
   add_executable(${name} "${SOURCE_FILES};${name}.cpp")
@@ -19,3 +22,6 @@ add_simple_test(obj)
 add_simple_test(mesh)
 add_simple_test(triangulation)
 add_simple_test(mesh_layout_reader)
+add_simple_test(format)
+add_simple_test(stl)
+add_simple_test(bytes_writer)

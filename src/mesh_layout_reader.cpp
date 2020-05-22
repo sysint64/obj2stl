@@ -31,6 +31,28 @@ namespace mesh {
         return this->triplets_data;
     }
 
+    std::vector<TripletFace> const& MeshLayoutReader::triplet_faces() {
+        this->triplet_faces_data.clear();
+
+        for (auto face : this->layout->faces) {
+            std::vector<Triplet> triplets;
+
+            for (int i = 0; i < face.vertices_indices.size(); i++) {
+                triplets.push_back(
+                    Triplet(
+                        face.vertices_indices[i],
+                        face.normals_indices[i],
+                        face.tex_coord_indices[i]
+                    )
+                );
+            }
+
+            this->triplet_faces_data.push_back(TripletFace(triplets));
+        }
+
+        return this->triplet_faces_data;
+    }
+
     std::vector<Triangle> const& MeshLayoutReader::triangles() {
         this->triangles_data.clear();
 

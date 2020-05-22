@@ -81,7 +81,7 @@ static std::shared_ptr<mesh::MeshLayout> mesh_layout() {
     return builder->build();
 }
 
-TEST(meshLayoutTest, basicAccessorsTest) {
+TEST(MeshLayoutReader, test_basic_cccessors) {
     auto layout = mesh_layout();
     auto triangulation_strategy = std::make_shared<mesh::DummyTriangulationStrategy>();
     auto reader = std::make_unique<mesh::MeshLayoutReader>(layout, triangulation_strategy);
@@ -147,7 +147,7 @@ TEST(meshLayoutTest, basicAccessorsTest) {
     );
 }
 
-TEST(meshLayoutTest, tripletsTest) {
+TEST(MeshLayoutReader, test_triplets) {
     auto layout = mesh_layout();
     auto triangulation_strategy = std::make_shared<mesh::DummyTriangulationStrategy>();
     auto reader = std::make_unique<mesh::MeshLayoutReader>(layout, triangulation_strategy);
@@ -176,7 +176,7 @@ TEST(meshLayoutTest, tripletsTest) {
     );
 }
 
-TEST(meshLayoutTest, trianglesTest) {
+TEST(MeshLayoutReader, test_triangles) {
     auto layout = mesh_layout();
     auto triangulation_strategy = std::make_shared<mesh::DummyTriangulationStrategy>();
     auto reader = std::make_unique<mesh::MeshLayoutReader>(layout, triangulation_strategy);
@@ -280,7 +280,7 @@ TEST(meshLayoutTest, trianglesTest) {
     );
 }
 
-TEST(meshLayoutTest, polygonsTest) {
+TEST(MeshLayoutReader, test_polygons) {
     auto layout = mesh_layout();
     auto triangulation_strategy = std::make_shared<mesh::DummyTriangulationStrategy>();
     auto reader = std::make_unique<mesh::MeshLayoutReader>(layout, triangulation_strategy);
