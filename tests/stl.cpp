@@ -26,3 +26,18 @@ TEST(StlMeshWriter, test_write_to_bytes) {
 
     outfile.write(stl_bytes.data(), stl_bytes.size());
 }
+
+TEST(StlMeshWriter, test_write_to_bytes_complex) {
+    auto lines = utils::load_text_file_lines("../../tests/resources/complex.obj");
+    auto obj = obj_file::load_from_string_lines(lines);
+    auto layout = obj_file::create_mesh_layout_from_obj(obj);
+    auto writer = std::make_unique<stl_file::StlMeshWriter>();
+    auto stl_bytes = writer->write(layout);
+
+    std::ofstream outfile(
+        "../../tests/resources/complex_generated.stl",
+        std::ios::out | std::ios::binary
+    );
+
+    outfile.write(stl_bytes.data(), stl_bytes.size());
+}

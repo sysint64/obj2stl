@@ -98,7 +98,7 @@ namespace obj_file {
 
     static size_t parse_optional_index(std::string str) {
         if (str.empty()) {
-            return mesh::absent_index;
+            return 0;
         }
         else {
             return std::stoi(str);
@@ -123,21 +123,19 @@ namespace obj_file {
         std::vector<mesh::TripletFace> faces;
         faces.reserve(obj.f.size());
 
-        for (auto f : obj.f) {
+        for (auto const& f : obj.f) {
             std::vector<mesh::Triplet> triplets;
             triplets.reserve(obj.f.size());
 
             for (auto triplet : f.triplets) {
-                triplets.push_back(
-                    mesh::Triplet(
-                        triplet.v == 0 ? mesh::absent_index : triplet.v - 1,
-                        triplet.vn == 0 ? mesh::absent_index : triplet.vn - 1,
-                        triplet.vt == 0 ? mesh::absent_index : triplet.vt - 1
-                    )
+                triplets.emplace_back(
+                    triplet.v == 0 ? mesh::absent_index : triplet.v - 1,
+                    triplet.vn == 0 ? mesh::absent_index : triplet.vn - 1,
+                    triplet.vt == 0 ? mesh::absent_index : triplet.vt - 1
                 );
             }
 
-            faces.push_back(mesh::TripletFace(triplets));
+            faces.emplace_back(triplets);
         }
 
         for (auto face : faces) {

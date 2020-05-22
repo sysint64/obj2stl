@@ -45,7 +45,7 @@ namespace mesh_format {
         union {
             int32_t val;
             std::array<std::byte, sizeof(int32_t)> raw;
-        } union_value;
+        } union_value {};
 
         union_value.val = value;
 
@@ -66,7 +66,7 @@ namespace mesh_format {
         union {
             float val;
             std::array<std::byte, sizeof(int32_t)> raw;
-        } union_value;
+        } union_value {};
 
         union_value.val = value;
 
