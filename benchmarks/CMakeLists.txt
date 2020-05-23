@@ -9,7 +9,8 @@ set(SOURCE_FILES ../src/obj.cpp
   ../src/mesh_layout_reader.cpp
   ../src/stl.cpp
   ../src/format.cpp
-  ../src/bytes_writer.cpp)
+  ../src/bytes_writer.cpp
+  ../src/calc.cpp)
 
 set(CMAKE_CXX_FLAGS "-O3 -std=c++17")
 set(CMAKE_LINKER_FLAGS "-fno-omit-frame-pointer -mno-omit-leaf-frame-pointer")
