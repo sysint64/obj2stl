@@ -48,4 +48,23 @@ namespace calc {
         return builder->build();
     }
 
+    static double triangle_area(mesh::Triangle const& triangle) {
+        glm::vec3 a = triangle.vertices[1] - triangle.vertices[0];
+        glm::vec3 b = triangle.vertices[2] - triangle.vertices[0];
+        glm::vec3 c = glm::cross(a, b);
+
+        return 0.5 * sqrt(c.x * c.x + c.y * c.y + c.z * c.z);
+    }
+
+    double calculate_surface_area(std::shared_ptr<mesh::MeshLayout> layout) {
+        auto triangulation_strategy = std::make_shared<mesh::DummyTriangulationStrategy>();
+        auto layout_reader = std::make_unique<mesh::MeshLayoutReader>(layout, triangulation_strategy);
+        double surface = 0;
+
+        for (auto const& triangle : layout_reader->triangles()) {
+            surface += triangle_area(triangle);
+        }
+
+        return surface;
+    }
 }

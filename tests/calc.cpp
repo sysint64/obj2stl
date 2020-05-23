@@ -12,7 +12,7 @@ int main(int argc, char **argv) {
     return RUN_ALL_TESTS();
 }
 
-TEST(Transforms, test_apply_transforms_to_layout_pos) {
+TEST(Calc, test_apply_transforms_to_layout_pos) {
     auto lines = utils::load_text_file_lines("../../tests/resources/box.obj");
     auto obj = obj_file::load_from_string_lines(lines);
     auto layout = obj_file::create_mesh_layout_from_obj(obj);
@@ -39,7 +39,7 @@ TEST(Transforms, test_apply_transforms_to_layout_pos) {
     );
 }
 
-TEST(Transforms, test_apply_transforms_to_layout_scale) {
+TEST(Calc, test_apply_transforms_to_layout_scale) {
     auto lines = utils::load_text_file_lines("../../tests/resources/box.obj");
     auto obj = obj_file::load_from_string_lines(lines);
     auto layout = obj_file::create_mesh_layout_from_obj(obj);
@@ -66,7 +66,7 @@ TEST(Transforms, test_apply_transforms_to_layout_scale) {
     );
 }
 
-TEST(Transforms, test_apply_transforms_to_layout_pos_and_scale) {
+TEST(Calc, test_apply_transforms_to_layout_pos_and_scale) {
     auto lines = utils::load_text_file_lines("../../tests/resources/box.obj");
     auto obj = obj_file::load_from_string_lines(lines);
     auto layout = obj_file::create_mesh_layout_from_obj(obj);
@@ -91,4 +91,12 @@ TEST(Transforms, test_apply_transforms_to_layout_pos_and_scale) {
             glm::vec3(8.000000, 4.000000, 1.000000)
         )
     );
+}
+
+TEST(Calc, test_calculate_surface_area) {
+    auto lines = utils::load_text_file_lines("../../tests/resources/box.obj");
+    auto obj = obj_file::load_from_string_lines(lines);
+    auto layout = obj_file::create_mesh_layout_from_obj(obj);
+
+    ASSERT_NEAR(calc::calculate_surface_area(layout), 24.0, 0.5);
 }

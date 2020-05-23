@@ -15,4 +15,6 @@ namespace calc {
         glm::vec3 rotation,
         glm::vec3 scale
     );
+
+    double calculate_surface_area(std::shared_ptr<mesh::MeshLayout> layout);
 }
