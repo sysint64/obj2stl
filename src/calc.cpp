@@ -71,6 +71,9 @@ namespace calc {
         return surface;
     }
 
+    // Calculate volume refs:
+    //   https://stackoverflow.com/questions/1406029/how-to-calculate-the-volume-of-a-3d-mesh-object-the-surface-of-which-is-made-up-t
+    //   http://chenlab.ece.cornell.edu/Publication/Cha/icip01_Cha.pdf
     static double signed_volume_of_triangle(mesh::Triangle const& triangle) {
         const auto v321 = triangle.vertices[2].x * triangle.vertices[1].y * triangle.vertices[0].z;
         const auto v231 = triangle.vertices[1].x * triangle.vertices[2].y * triangle.vertices[0].z;
@@ -107,6 +110,7 @@ namespace calc {
         else return v1 < 0 && v2 < 0;
     }
 
+    // Ref: https://stackoverflow.com/questions/42740765/intersection-between-line-and-triangle-in-3d
     static bool test_intersect_triangle(
         glm::vec3 ray_dir,
         glm::vec3 ray_pos,

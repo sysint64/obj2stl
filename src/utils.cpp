@@ -22,6 +22,7 @@ namespace utils {
         return std::move(lines);
     }
 
+    // https://stackoverflow.com/questions/1001307/detecting-endianness-programmatically-in-a-c-program
     bool is_big_endian() {
         union {
             uint32_t i;
