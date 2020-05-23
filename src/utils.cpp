@@ -1,6 +1,7 @@
 #include "utils.hpp"
 
 #include <cstring>
+#include <iterator>
 #include <fstream>
 #include <sstream>
 
@@ -8,13 +9,18 @@ namespace utils {
 
     std::vector<std::string> load_text_file_lines(std::string const& filepath) {
         std::vector<std::string> lines;
-        std::ifstream ifs(filepath);
 
-        for (std::string line; std::getline(ifs, line); ) {
+        std::ifstream ifs;
+        ifs.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+        ifs.open(filepath);
+
+        std::string line;
+
+        while (ifs.peek() != EOF && std::getline(ifs, line)) {
             lines.push_back(line);
         }
 
-        return lines;
+        return std::move(lines);
     }
 
     bool is_big_endian() {

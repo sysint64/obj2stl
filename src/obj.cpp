@@ -41,6 +41,10 @@ namespace obj_file {
             }
         }
 
+        if (v.empty()) {
+            throw StructIsException();
+        }
+
         return ObjStruct(v, vt, vn, f);
     }
 

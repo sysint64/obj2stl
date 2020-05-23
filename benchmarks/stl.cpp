@@ -24,7 +24,14 @@ static void bm_complex(benchmark::State& state) {
   }
 }
 
+static void bm_box(benchmark::State& state) {
+  for (auto _ : state) {
+      convert_to_stl("box.obj");
+  }
+}
+
 BENCHMARK(bm_bugatti);
 BENCHMARK(bm_complex);
+BENCHMARK(bm_box);
 
 BENCHMARK_MAIN();

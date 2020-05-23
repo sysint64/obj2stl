@@ -17,6 +17,12 @@ namespace obj_file {
         }
     };
 
+    struct StructIsException : public std::exception {
+        [[nodiscard]] const char* what() const noexcept override {
+            return "model struct is empty";
+        }
+    };
+
     struct Triplet {
         size_t v;
         size_t vt;
