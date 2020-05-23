@@ -1,6 +1,5 @@
 #include "utils.hpp"
 
-#include <cstring>
 #include <iterator>
 #include <fstream>
 #include <sstream>

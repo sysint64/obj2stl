@@ -1,11 +1,9 @@
-#include <stdio.h>
 #include <obj.hpp>
 #include <iostream>
 #include <fstream>
 #include <filesystem>
 
 #include "vendor/cxxopts.hpp"
-#include "obj.hpp"
 #include "stl.hpp"
 #include "utils.hpp"
 
