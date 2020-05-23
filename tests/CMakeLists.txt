@@ -1,7 +1,7 @@
 include(GoogleTest)
 
 find_package(GTest REQUIRED)
-# find_package(GMock REQUIRED)
+find_package(GMock REQUIRED)
 
 set(SOURCE_FILES ../src/obj.cpp
   ../src/utils.cpp
