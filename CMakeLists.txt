@@ -31,7 +31,8 @@ set(SOURCE_FILES src/obj.cpp
   src/mesh_layout_reader.cpp
   src/stl.cpp
   src/format.cpp
-  src/bytes_writer.cpp)
+  src/bytes_writer.cpp
+  src/calc.cpp)
 
 add_executable(main src/main.cpp ${SOURCE_FILES})
 include_directories(include/)

@@ -57,8 +57,12 @@ namespace mesh {
         this->colors.push_back(color);
     }
 
-    void MeshLayoutBuilder::push_triplet(Triplet triplet) {
+    void MeshLayoutBuilder::push_triplet(Triplet const& triplet) {
         this->triplets.push_back(triplet);
+    }
+
+    void MeshLayoutBuilder::push_face_layout(FaceLayout const& face) {
+        this->faces.push_back(face);
     }
 
     void MeshLayoutBuilder::push_triplet_face() {
@@ -67,7 +71,7 @@ namespace mesh {
         std::vector<size_t> tex_coord_indices;
         std::vector<size_t> color_indices;
 
-        for (auto triplet : this->triplets) {
+        for (auto const& triplet : this->triplets) {
             vertices_indices.push_back(triplet.vertex_index);
             normals_indices.push_back(triplet.normal_index);
             tex_coord_indices.push_back(triplet.tex_coord_index);
@@ -86,7 +90,7 @@ namespace mesh {
     void MeshLayoutBuilder::push_triplet_face(TripletFace const& face) {
         this->triplets.clear();
 
-        for (auto triplet : face.triplets) {
+        for (auto const& triplet : face.triplets) {
             this->push_triplet(triplet);
         }
 
@@ -140,7 +144,7 @@ namespace mesh {
         );
     }
 
-    void MeshLayoutBuilder::push_triangle(Triangle triangle) {
+    void MeshLayoutBuilder::push_triangle(Triangle const& triangle) {
         std::vector<glm::vec3> polygon_normals;
         std::vector<glm::vec3> polygon_vertices;
         std::vector<glm::vec2> polygon_tex_coords;
@@ -175,5 +179,59 @@ namespace mesh {
                 std::nullopt
             )
         );
+    }
+
+    void MeshLayoutBuilder::push_vertices(std::vector<glm::vec3> const& items) {
+        for (auto const& item : items) {
+            this->push_vertex(item);
+        }
+    }
+
+    void MeshLayoutBuilder::push_normals(std::vector<glm::vec3> const& items) {
+        for (auto const& item : items) {
+            this->push_normal(item);
+        }
+    }
+
+    void MeshLayoutBuilder::push_tex_coords(std::vector<glm::vec2> const& items) {
+        for (auto const& item : items) {
+            this->push_tex_coord(item);
+        }
+    }
+
+    void MeshLayoutBuilder::push_colors(std::vector<glm::vec4> const& items) {
+        for (auto const& item : items) {
+            this->push_color(item);
+        }
+    }
+
+    void MeshLayoutBuilder::push_triplets(std::vector<Triplet> const& items) {
+        for (auto const& item : items) {
+            this->push_triplet(item);
+        }
+    }
+
+    void MeshLayoutBuilder::push_triplet_faces(std::vector<TripletFace> const& items) {
+        for (auto const& item : items) {
+            this->push_triplet_face(item);
+        }
+    }
+
+    void MeshLayoutBuilder::push_polygons(std::vector<Polygon> const& items) {
+        for (auto const& item : items) {
+            this->push_polygon(item);
+        }
+    }
+
+    void MeshLayoutBuilder::push_triangles(std::vector<Triangle> const& items) {
+        for (auto const& item : items) {
+            this->push_triangle(item);
+        }
+    }
+
+    void MeshLayoutBuilder::push_face_layouts(std::vector<FaceLayout> const& items) {
+        for (auto const& item : items) {
+            this->push_face_layout(item);
+        }
     }
 }

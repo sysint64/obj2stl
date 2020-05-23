@@ -204,21 +204,41 @@ namespace mesh {
 
         void push_vertex(glm::vec3 vertex);
 
+        void push_vertices(std::vector<glm::vec3> const& items);
+
         void push_normal(glm::vec3 normal);
+
+        void push_normals(std::vector<glm::vec3> const& items);
 
         void push_tex_coord(glm::vec2 tex_coord);
 
+        void push_tex_coords(std::vector<glm::vec2> const& items);
+
         void push_color(glm::vec4 color);
 
-        void push_triplet(Triplet triplet);
+        void push_colors(std::vector<glm::vec4> const& items);
+
+        void push_triplet(Triplet const& triplet);
+
+        void push_triplets(std::vector<Triplet> const& items);
 
         void push_triplet_face();
 
         void push_triplet_face(TripletFace const& face);
 
+        void push_triplet_faces(std::vector<TripletFace> const& items);
+
         void push_polygon(Polygon const& polygon);
 
-        void push_triangle(Triangle triangle);
+        void push_polygons(std::vector<Polygon> const& items);
+
+        void push_triangle(Triangle const& triangle);
+
+        void push_triangles(std::vector<Triangle> const& items);
+
+        void push_face_layout(FaceLayout const& face);
+
+        void push_face_layouts(std::vector<FaceLayout> const& items);
     };
 
     class TriangulationStrategy {
