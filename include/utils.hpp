@@ -6,7 +6,11 @@
 #include <algorithm>
 #include <glm/glm.hpp>
 
+#include "mesh.hpp"
+
 namespace utils {
+
+    constexpr double pi = 3.14159265358979323846;
 
     std::vector<std::string> load_text_file_lines(std::string const& filepath);
 
@@ -30,5 +34,7 @@ namespace utils {
     bool is_little_endian();
 
     glm::vec3 calculate_normal(glm::vec3 v1, glm::vec3 v2, glm::vec3 v3);
+
+    glm::vec3 calculate_normal(mesh::Triangle const& triangle);
 
 }

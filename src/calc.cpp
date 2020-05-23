@@ -1,4 +1,5 @@
 #include "calc.hpp"
+#include "utils.hpp"
 
 namespace calc {
 
@@ -68,7 +69,7 @@ namespace calc {
         return surface;
     }
 
-    double signed_volume_of_triangle(mesh::Triangle const& triangle) {
+    static double signed_volume_of_triangle(mesh::Triangle const& triangle) {
         const auto v321 = triangle.vertices[2].x * triangle.vertices[1].y * triangle.vertices[0].z;
         const auto v231 = triangle.vertices[1].x * triangle.vertices[2].y * triangle.vertices[0].z;
         const auto v312 = triangle.vertices[2].x * triangle.vertices[0].y * triangle.vertices[1].z;
@@ -89,6 +90,54 @@ namespace calc {
         }
 
         return volume;
+    }
+
+    static double signed_volume(glm::vec3 a, glm::vec3 b, glm::vec3 c, glm::vec3 d) {
+        return (1.0f/6.0f) * glm::dot(glm::cross(b-a, c-a), d-a);
+    }
+
+    static double signed_volume(glm::vec3 point, mesh::Triangle const& triangle) {
+        return signed_volume(point, triangle.vertices[0], triangle.vertices[1], triangle.vertices[2]);
+    }
+
+    static bool eq_sign(double v1, double v2) {
+        if (v1 >= 0 && v2 >= 0) return true;
+        else return v1 < 0 && v2 < 0;
+    }
+
+    static bool test_intersect_triangle(
+        glm::vec3 ray_dir,
+        glm::vec3 ray_pos,
+        mesh::Triangle const& triangle
+    ) {
+        const glm::vec3 ray_dir_normalized = glm::normalize(ray_dir);
+
+        const auto q1 = ray_pos;
+        const auto q2 = ray_dir_normalized * std::numeric_limits<glm::vec3>::infinity();
+
+        const auto v1 = signed_volume(q1, triangle);
+        const auto v2 = signed_volume(q2, triangle);
+        const auto v3 = signed_volume(q1, q2, triangle.vertices[0], triangle.vertices[1]);
+        const auto v4 = signed_volume(q1, q2, triangle.vertices[1], triangle.vertices[2]);
+        const auto v5 = signed_volume(q1, q2, triangle.vertices[2], triangle.vertices[0]);
+
+        return !eq_sign(v1, v2) && eq_sign(v3, v4) && eq_sign(v3, v5);
+    }
+
+    bool is_point_inside_mesh(glm::vec3 point, std::shared_ptr<mesh::MeshLayout> layout) {
+        auto triangulation_strategy = std::make_shared<mesh::DummyTriangulationStrategy>();
+        auto layout_reader = std::make_unique<mesh::MeshLayoutReader>(layout, triangulation_strategy);
+
+        for (auto const& triangle : layout_reader->triangles()) {
+            const auto n = utils::calculate_normal(triangle);
+            const auto dist = glm::dot(n, point - triangle.vertices[0]);
+
+            if (dist > 0) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
 }

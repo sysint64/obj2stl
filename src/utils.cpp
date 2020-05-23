@@ -40,6 +40,10 @@ namespace utils {
         return glm::normalize(dir);
     }
 
+    glm::vec3 calculate_normal(mesh::Triangle const& triangle) {
+        return calculate_normal(triangle.vertices[0], triangle.vertices[1], triangle.vertices[2]);
+    }
+
     std::vector<std::string> split(std::string const& src, char delimiter) {
         std::stringstream test(src);
         std::string segment;

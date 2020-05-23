@@ -108,3 +108,51 @@ TEST(Calc, test_calculate_volume) {
 
     ASSERT_NEAR(calc::calculate_volume(layout), 8.0, 0.5);
 }
+
+TEST(Calc, test_is_point_inside_mesh_inside) {
+    auto lines = utils::load_text_file_lines("../../tests/resources/box.obj");
+    auto obj = obj_file::load_from_string_lines(lines);
+    auto layout = obj_file::create_mesh_layout_from_obj(obj);
+
+    ASSERT_TRUE(calc::is_point_inside_mesh(glm::vec3(0, 0, 0), layout));
+}
+
+TEST(Calc, test_is_point_inside_mesh_inside_2) {
+    auto lines = utils::load_text_file_lines("../../tests/resources/box.obj");
+    auto obj = obj_file::load_from_string_lines(lines);
+    auto layout = obj_file::create_mesh_layout_from_obj(obj);
+
+    ASSERT_TRUE(calc::is_point_inside_mesh(glm::vec3(0.5, 0.5, 0.5), layout));
+}
+
+TEST(Calc, test_is_point_inside_mesh_outside) {
+    auto lines = utils::load_text_file_lines("../../tests/resources/box.obj");
+    auto obj = obj_file::load_from_string_lines(lines);
+    auto layout = obj_file::create_mesh_layout_from_obj(obj);
+
+    ASSERT_FALSE(calc::is_point_inside_mesh(glm::vec3(2, 0, 0), layout));
+}
+
+TEST(Calc, test_is_point_inside_mesh_outside_2) {
+    auto lines = utils::load_text_file_lines("../../tests/resources/box.obj");
+    auto obj = obj_file::load_from_string_lines(lines);
+    auto layout = obj_file::create_mesh_layout_from_obj(obj);
+
+    ASSERT_FALSE(calc::is_point_inside_mesh(glm::vec3(-2, 0, 0), layout));
+}
+
+TEST(Calc, test_is_point_inside_mesh_outside_3) {
+    auto lines = utils::load_text_file_lines("../../tests/resources/box.obj");
+    auto obj = obj_file::load_from_string_lines(lines);
+    auto layout = obj_file::create_mesh_layout_from_obj(obj);
+
+    ASSERT_FALSE(calc::is_point_inside_mesh(glm::vec3(0, 2, 0), layout));
+}
+
+TEST(Calc, test_is_point_inside_mesh_outside_4) {
+    auto lines = utils::load_text_file_lines("../../tests/resources/box.obj");
+    auto obj = obj_file::load_from_string_lines(lines);
+    auto layout = obj_file::create_mesh_layout_from_obj(obj);
+
+    ASSERT_FALSE(calc::is_point_inside_mesh(glm::vec3(0, -2, 0), layout));
+}

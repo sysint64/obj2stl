@@ -21,4 +21,6 @@ namespace calc {
 
     double calculate_volume(std::shared_ptr<mesh::MeshLayout> layout);
 
+    bool is_point_inside_mesh(glm::vec3 point, std::shared_ptr<mesh::MeshLayout> layout);
+
 }
