@@ -11,16 +11,16 @@ namespace calc {
 
     // Create new transformed mesh layout
     std::shared_ptr<mesh::MeshLayout> apply_transforms_to_layout(
-        std::shared_ptr<mesh::MeshLayout> layout,
+        std::shared_ptr<mesh::MeshLayout> const& layout,
         glm::vec3 pos,
         glm::vec3 rotation,
         glm::vec3 scale
     );
 
-    double calculate_surface_area(std::shared_ptr<mesh::MeshLayout> layout);
+    double calculate_surface_area(std::shared_ptr<mesh::MeshLayout> const& layout);
 
-    double calculate_volume(std::shared_ptr<mesh::MeshLayout> layout);
+    double calculate_volume(std::shared_ptr<mesh::MeshLayout> const& layout);
 
-    bool is_point_inside_mesh(glm::vec3 point, std::shared_ptr<mesh::MeshLayout> layout);
+    bool is_point_inside_mesh(glm::vec3 point, std::shared_ptr<mesh::MeshLayout> const& layout);
 
 }

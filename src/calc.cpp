@@ -1,10 +1,12 @@
 #include "calc.hpp"
+
+#include <cmath>
 #include "utils.hpp"
 
 namespace calc {
 
     std::shared_ptr<mesh::MeshLayout> apply_transforms_to_layout(
-        std::shared_ptr<mesh::MeshLayout> layout,
+        std::shared_ptr<mesh::MeshLayout> const& layout,
         glm::vec3 pos,
         glm::vec3 rotation,
         glm::vec3 scale
@@ -54,10 +56,10 @@ namespace calc {
         const glm::vec3 b = triangle.vertices[2] - triangle.vertices[0];
         const glm::vec3 c = glm::cross(a, b);
 
-        return 0.5 * sqrt(c.x * c.x + c.y * c.y + c.z * c.z);
+        return 0.5 * std::sqrt(c.x * c.x + c.y * c.y + c.z * c.z);
     }
 
-    double calculate_surface_area(std::shared_ptr<mesh::MeshLayout> layout) {
+    double calculate_surface_area(std::shared_ptr<mesh::MeshLayout> const& layout) {
         auto triangulation_strategy = std::make_shared<mesh::DummyTriangulationStrategy>();
         auto layout_reader = std::make_unique<mesh::MeshLayoutReader>(layout, triangulation_strategy);
         double surface = 0;
@@ -80,7 +82,7 @@ namespace calc {
         return (1.0f/6.0f) * (-v321 + v231 + v312 - v132 - v213 + v123);
     }
 
-    double calculate_volume(std::shared_ptr<mesh::MeshLayout> layout) {
+    double calculate_volume(std::shared_ptr<mesh::MeshLayout> const& layout) {
         auto triangulation_strategy = std::make_shared<mesh::DummyTriangulationStrategy>();
         auto layout_reader = std::make_unique<mesh::MeshLayoutReader>(layout, triangulation_strategy);
         double volume = 0;
@@ -124,7 +126,7 @@ namespace calc {
         return !eq_sign(v1, v2) && eq_sign(v3, v4) && eq_sign(v3, v5);
     }
 
-    bool is_point_inside_mesh(glm::vec3 point, std::shared_ptr<mesh::MeshLayout> layout) {
+    bool is_point_inside_mesh(glm::vec3 point, std::shared_ptr<mesh::MeshLayout> const& layout) {
         auto triangulation_strategy = std::make_shared<mesh::DummyTriangulationStrategy>();
         auto layout_reader = std::make_unique<mesh::MeshLayoutReader>(layout, triangulation_strategy);
 
