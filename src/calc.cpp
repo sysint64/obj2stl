@@ -49,9 +49,9 @@ namespace calc {
     }
 
     static double triangle_area(mesh::Triangle const& triangle) {
-        glm::vec3 a = triangle.vertices[1] - triangle.vertices[0];
-        glm::vec3 b = triangle.vertices[2] - triangle.vertices[0];
-        glm::vec3 c = glm::cross(a, b);
+        const glm::vec3 a = triangle.vertices[1] - triangle.vertices[0];
+        const glm::vec3 b = triangle.vertices[2] - triangle.vertices[0];
+        const glm::vec3 c = glm::cross(a, b);
 
         return 0.5 * sqrt(c.x * c.x + c.y * c.y + c.z * c.z);
     }
@@ -67,4 +67,28 @@ namespace calc {
 
         return surface;
     }
+
+    double signed_volume_of_triangle(mesh::Triangle const& triangle) {
+        const auto v321 = triangle.vertices[2].x * triangle.vertices[1].y * triangle.vertices[0].z;
+        const auto v231 = triangle.vertices[1].x * triangle.vertices[2].y * triangle.vertices[0].z;
+        const auto v312 = triangle.vertices[2].x * triangle.vertices[0].y * triangle.vertices[1].z;
+        const auto v132 = triangle.vertices[0].x * triangle.vertices[2].y * triangle.vertices[1].z;
+        const auto v213 = triangle.vertices[1].x * triangle.vertices[0].y * triangle.vertices[2].z;
+        const auto v123 = triangle.vertices[0].x * triangle.vertices[1].y * triangle.vertices[2].z;
+
+        return (1.0f/6.0f) * (-v321 + v231 + v312 - v132 - v213 + v123);
+    }
+
+    double calculate_volume(std::shared_ptr<mesh::MeshLayout> layout) {
+        auto triangulation_strategy = std::make_shared<mesh::DummyTriangulationStrategy>();
+        auto layout_reader = std::make_unique<mesh::MeshLayoutReader>(layout, triangulation_strategy);
+        double volume = 0;
+
+        for (auto const& triangle : layout_reader->triangles()) {
+            volume += signed_volume_of_triangle(triangle);
+        }
+
+        return volume;
+    }
+
 }

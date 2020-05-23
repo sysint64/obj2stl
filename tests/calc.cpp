@@ -100,3 +100,11 @@ TEST(Calc, test_calculate_surface_area) {
 
     ASSERT_NEAR(calc::calculate_surface_area(layout), 24.0, 0.5);
 }
+
+TEST(Calc, test_calculate_volume) {
+    auto lines = utils::load_text_file_lines("../../tests/resources/box.obj");
+    auto obj = obj_file::load_from_string_lines(lines);
+    auto layout = obj_file::create_mesh_layout_from_obj(obj);
+
+    ASSERT_NEAR(calc::calculate_volume(layout), 8.0, 0.5);
+}

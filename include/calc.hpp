@@ -8,7 +8,8 @@
 #include "mesh.hpp"
 
 namespace calc {
-    // Will create new transformed mesh layout
+
+    // Create new transformed mesh layout
     std::shared_ptr<mesh::MeshLayout> apply_transforms_to_layout(
         std::shared_ptr<mesh::MeshLayout> layout,
         glm::vec3 pos,
@@ -17,4 +18,7 @@ namespace calc {
     );
 
     double calculate_surface_area(std::shared_ptr<mesh::MeshLayout> layout);
+
+    double calculate_volume(std::shared_ptr<mesh::MeshLayout> layout);
+
 }
