@@ -49,7 +49,7 @@ static void save_to_stl(std::vector<char> const& out_bytes, std::string const& o
             outfile.open(output, std::ios::out | std::ios::binary);
             outfile.write(out_bytes.data(), out_bytes.size());
 
-            std::cout << "Sucessfully generated" << std::endl;
+            std::cout << "Successfully converted" << std::endl;
         }
     }
     catch (std::ofstream::failure const& e) {
@@ -61,8 +61,8 @@ int main(int argc, char **argv) {
     try {
         cxxopts::Options options(argv[0], "Converter from .obj to .stl");
 
-        std::string input = "";
-        std::string output = "";
+        std::string input;
+        std::string output;
 
         options
             .add_options()
@@ -72,7 +72,7 @@ int main(int argc, char **argv) {
 
         auto result = options.parse(argc, argv);
 
-        if (result.count("help") > 0 || result.arguments().size() == 0) {
+        if (result.count("help") > 0 || result.arguments().empty()) {
             std::cout << options.help({"", "Group"}) << std::endl;
             exit(0);
         }
