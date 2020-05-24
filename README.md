@@ -75,3 +75,16 @@ make bench
 ```
 ./main -c -s -v -p -i "<obj-file-path>" -o "<stl-file-path>" --px 4 --py 2 --pz 1 --ty 2 --tz 3 --rx 45 --ry 45 --sx 2 --sz 5
 ```
+
+## Roadmap
+
+- [x] Design and implement a software architecture for a general 3D file converter, that allows you to read, convert, and write 3D mesh file formats. The architecture should make it possible to easily extend the implementation with new file formats.
+
+- [x] Create a concrete implementation for OBJ->STL conversion (only one direction! From OBJ to binary STL). The OBJ file support should be limited to v, vt, vn and f elements. STL export should be binary STL, not the text version. Note that OBJ supports non triangular faces. You can assume that these are always convex planar faces.
+
+- [x] Allow the user to set a transformation (any combination of rotation, scale, translation) in the converter.
+- [x] Calculate the surface area of the model
+- [x] (Experimental) Calculate the volume of the model.
+- [x] (Experimental) Implement an algorithm that will decide from a 3d point if it is inside or outside the model.
+- [ ] Calculate the volume of the model using voxels.
+- [ ] Implement an algorithm that will decide from a 3d point if it is inside or outside the model using voxels.
