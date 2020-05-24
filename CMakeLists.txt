@@ -4,8 +4,12 @@ project(shapr3d_homework)
 option(ENABLE_CLANG_SANITIZE "ENABLE_CLANG_SANITIZE" ON)
 option(ENABLE_TESTS "Enable tests" ON)
 option(ENABLE_BENCHMARKING "Enable benchmarking" ON)
+option(ENABLE_CLANG_TIDY "Enable clang-tidy" OFF)
 
-# set(CMAKE_CXX_CLANG_TIDY clang-tidy)
+if (ENABLE_CLANG_TIDY)
+  set(CMAKE_CXX_CLANG_TIDY clang-tidy)
+endif()
+
 set(DEBUG_FLAGS "${CMAKE_CXX_FLAGS} -g3 -O0")
 
 if (APPLE)
