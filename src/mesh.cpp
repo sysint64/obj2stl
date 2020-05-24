@@ -110,8 +110,6 @@ namespace mesh {
         std::vector<size_t> colors_indices(size);
 
         std::iota(vertices_indices.begin(), vertices_indices.end(), vertex_start);
-        std::iota(normals_indices.begin(), normals_indices.end(), normal_start);
-        std::iota(tex_coord_indices.begin(), tex_coord_indices.end(), tex_coord_start);
         std::fill(colors_indices.begin(), colors_indices.end(), ::mesh::absent_index);
 
         std::copy(
@@ -126,6 +124,10 @@ namespace mesh {
                 std::end(polygon.normals.value()),
                 std::back_inserter(this->normals)
             );
+            std::iota(normals_indices.begin(), normals_indices.end(), normal_start);
+        }
+        else {
+            std::fill(normals_indices.begin(), normals_indices.end(), ::mesh::absent_index);
         }
 
         if (polygon.tex_coords) {
@@ -134,6 +136,10 @@ namespace mesh {
                 std::end(polygon.tex_coords.value()),
                 std::back_inserter(this->tex_coords)
             );
+            std::iota(tex_coord_indices.begin(), tex_coord_indices.end(), tex_coord_start);
+        }
+        else {
+            std::fill(tex_coord_indices.begin(), tex_coord_indices.end(), ::mesh::absent_index);
         }
 
         this->faces.emplace_back(
