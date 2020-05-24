@@ -1,4 +1,7 @@
+#include <numeric>
+
 #include "voxel.hpp"
+#include "calc.hpp"
 
 namespace voxel {
 
@@ -50,6 +53,18 @@ namespace voxel {
         );
 
         this->nodes = std::move(nodes);
+    }
+
+    std::unique_ptr<OctreeNode> build_octree_from_mesh_layout(
+        std::shared_ptr<mesh::MeshLayout> const& layout
+    ) {
+        auto bound = calc::eq_bounding_box(calc::find_bounding_box(layout));
+        auto tree = std::make_unique<OctreeNode>(bound.min, bound.max);
+
+        tree->indices.resize(layout->vertices.size());
+        std::iota(tree->indices.begin(), tree->indices.end(), 0);
+
+        return std::move(tree);
     }
 
 }

@@ -166,4 +166,17 @@ namespace calc {
         );
     }
 
+    BoundingBox eq_bounding_box(BoundingBox box) {
+        float min_value = std::min(box.min.x, box.min.y);
+        min_value = std::min(min_value, box.min.z);
+
+        float max_value = std::max(box.max.x, box.max.y);
+        max_value = std::max(max_value, box.max.z);
+
+        return BoundingBox(
+            glm::vec3(min_value),
+            glm::vec3(max_value)
+        );
+    }
+
 }

@@ -156,3 +156,19 @@ TEST(Calc, test_is_point_inside_mesh_outside_4) {
 
     ASSERT_FALSE(calc::is_point_inside_mesh(glm::vec3(0, -2, 0), layout));
 }
+
+TEST(Calc, test_eq_bounding_box) {
+    auto bb = calc::BoundingBox(
+        glm::vec3(-1, -2, -1),
+        glm::vec3(1, 2, 1)
+    );
+    auto eq_bb = calc::eq_bounding_box(bb);
+
+    ASSERT_NEAR(eq_bb.min.x, -2.0, 0.01);
+    ASSERT_NEAR(eq_bb.min.y, -2.0, 0.01);
+    ASSERT_NEAR(eq_bb.min.z, -2.0, 0.01);
+
+    ASSERT_NEAR(eq_bb.max.x, 2.0, 0.01);
+    ASSERT_NEAR(eq_bb.max.y, 2.0, 0.01);
+    ASSERT_NEAR(eq_bb.max.z, 2.0, 0.01);
+}

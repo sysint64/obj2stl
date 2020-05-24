@@ -14,6 +14,7 @@ namespace voxel {
         LeafFillness fillness;
         const glm::vec3 min;
         const glm::vec3 max;
+        std::vector<size_t> vertex_indices;
         std::optional<std::array<std::unique_ptr<OctreeNode>, 8>> nodes;
 
         void divide();

@@ -32,4 +32,7 @@ namespace calc {
     };
 
     BoundingBox find_bounding_box(std::shared_ptr<mesh::MeshLayout> const& layout);
+
+    // Makes all sides equal
+    BoundingBox eq_bounding_box(BoundingBox box);
 }
