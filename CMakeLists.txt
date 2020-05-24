@@ -32,7 +32,8 @@ set(SOURCE_FILES src/obj.cpp
   src/stl.cpp
   src/format.cpp
   src/bytes_writer.cpp
-  src/calc.cpp)
+  src/calc.cpp
+  src/voxel.cpp)
 
 add_executable(main src/main.cpp ${SOURCE_FILES})
 include_directories(include/)

@@ -23,4 +23,13 @@ namespace calc {
 
     bool is_point_inside_mesh(glm::vec3 point, std::shared_ptr<mesh::MeshLayout> const& layout);
 
+    struct BoundingBox {
+        const glm::vec3 min;
+        const glm::vec3 max;
+
+        BoundingBox(glm::vec3 min, glm::vec3 max)
+            : min(min), max(max) {}
+    };
+
+    BoundingBox find_bounding_box(std::shared_ptr<mesh::MeshLayout> const& layout);
 }

@@ -11,7 +11,8 @@ set(SOURCE_FILES ../src/obj.cpp
   ../src/stl.cpp
   ../src/format.cpp
   ../src/bytes_writer.cpp
-  ../src/calc.cpp)
+  ../src/calc.cpp
+  ../src/voxel.cpp)
 
 macro(add_simple_test name)
   add_executable(${name} "${SOURCE_FILES};${name}.cpp")
@@ -26,3 +27,4 @@ add_simple_test(mesh_layout_reader)
 add_simple_test(stl)
 add_simple_test(bytes_writer)
 add_simple_test(calc)
+add_simple_test(voxel)

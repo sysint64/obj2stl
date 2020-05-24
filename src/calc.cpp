@@ -146,4 +146,24 @@ namespace calc {
         return true;
     }
 
+    BoundingBox find_bounding_box(std::shared_ptr<mesh::MeshLayout> const& layout) {
+        glm::vec3 min;
+        glm::vec3 max;
+
+        for (auto const& vertex : layout->vertices) {
+            min.x = std::min(min.x, vertex.x);
+            min.y = std::min(min.y, vertex.y);
+            min.z = std::min(min.z, vertex.z);
+
+            max.x = std::max(max.x, vertex.x);
+            max.y = std::max(max.y, vertex.y);
+            max.z = std::max(max.z, vertex.z);
+        }
+
+        return BoundingBox(
+            std::move(min),
+            std::move(max)
+        );
+    }
+
 }
