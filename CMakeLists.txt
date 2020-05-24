@@ -5,22 +5,24 @@ option(ENABLE_CLANG_SANITIZE "ENABLE_CLANG_SANITIZE" ON)
 option(ENABLE_TESTS "Enable tests" ON)
 option(ENABLE_BENCHMARKING "Enable benchmarking" ON)
 
-set(CMAKE_CXX_CLANG_TIDY clang-tidy)
+# set(CMAKE_CXX_CLANG_TIDY clang-tidy)
 set(DEBUG_FLAGS "${CMAKE_CXX_FLAGS} -g3 -O0")
 
 if (APPLE)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${DEBUG_FLAGS} -std=c++17 -stdlib=libc++ -Wall")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${DEBUG_FLAGS} -std=c++17 -stdlib=libc++")
 else()
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${DEBUG_FLAGS} -std=c++17")
 endif()
 
 if (ENABLE_CLANG_SANITIZE)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-omit-frame-pointer -fsanitize=address -fsanitize=leak -fsanitize=undefined")
-  set(CMAKE_LINKER_FLAGS "${CMAKE_LINKER_FLAGS} -fno-omit-frame-pointer -fsanitize=address -fsanitize=leak -fsanitize=undefined")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-omit-frame-pointer -fsanitize=address -fsanitize=undefined")
+  set(CMAKE_LINKER_FLAGS "${CMAKE_LINKER_FLAGS} -fno-omit-frame-pointer -fsanitize=address -fsanitize=undefined")
 endif()
 
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 find_package(GLM REQUIRED)
+
+include_directories(${GLM_INCLUDE_DIR})
 
 add_definitions(-DGLM_FORCE_RADIANS)
 

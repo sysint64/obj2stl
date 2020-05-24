@@ -9,6 +9,7 @@
 #include <sstream>
 #include <exception>
 #include <optional>
+#include <array>
 
 namespace mesh {
     const size_t absent_index = std::numeric_limits<size_t>::max();

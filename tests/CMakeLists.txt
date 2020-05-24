@@ -3,6 +3,9 @@ include(GoogleTest)
 find_package(GTest REQUIRED)
 find_package(GMock REQUIRED)
 
+include_directories(${GTEST_INCLUDE_DIRS})
+include_directories(${GMOCK_INCLUDE_DIRS})
+
 set(SOURCE_FILES ../src/obj.cpp
   ../src/utils.cpp
   ../src/mesh.cpp
