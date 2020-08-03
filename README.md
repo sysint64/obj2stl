@@ -1,4 +1,4 @@
-# Shapr3D Home work
+# Obj2Stl
 
 ## Compile
 
